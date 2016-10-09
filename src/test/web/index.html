@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en:US">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple People Preference Test Application.</title>
+    <link rel="stylesheet" href="css/main.css" type="text/css" />
+</head>
+<header class="header">
+    <h3>Test page for emulating HTTP requests and viewing responses by <strong>Simple People Preferences Test Application</strong>.</h3>
+</header>
+<section class="content" id="container">
+    <section class="action">
+        <div class="methods">
+            <button class="get" id="get">GET</button>
+            <button class="post" id="post">POST</button>
+            <button class="put" id="put">PUT</button>
+            <button class="delete" id="delete">DELETE</button>
+        </div>
+        <fieldset class="fields" id="fields">
+            <legend>Person</legend>
+            <div class="field">
+                <label for="id">Id</label>
+                <input id="id" type="text" pattern="[0-9]*"/>
+            </div>
+            <div class="field">
+                <label for="firstName">First Name</label>
+                <input id="firstName" type="text" />
+            </div>
+            <div class="field">
+                <label for="lastName">Last Name</label>
+                <input id="lastName" type="text" />
+            </div>
+            <div class="field">
+                <label for="dateOfBirth">Birth Date</label>
+                <input id="dateOfBirth" type="date" placeholder="yyyy-mm-dd" />
+            </div>
+            <div class="field">
+                <label for="favoriteColor">Favorite Color</label>
+                <input id="favoriteColor" type="text"/>
+            </div>
+            <div class="field">
+                <label for="favoriteFood">Favorite Food</label>
+                <input id="favoriteFood" type="text"/>
+            </div>
+            <div id="mediaTypeCont" class="mediaTypeCont">
+                <div class="mediaTypeLabel">Request media type</div>
+                <div class="mediaType">
+                    <input type="radio" id="xml" name="mediaType" value="xml" checked="checked"/>
+                    <label for="xml">application/xml</label>
+                    <input type="radio" id="json" name="mediaType" value="json"/>
+                    <label for="json">application/json</label>
+                </div>
+            </div>
+            <button class="send" id="send">SEND</button>
+        </fieldset>
+    </section>
+    <section class="communication">
+        <fieldset class="request" id="request">
+            <legend>Request</legend>
+            <div class="requestURL">
+                <label for="requestURLText">Request URL:</label>
+                <span id="requestURLText"></span>
+            </div>
+            <div id="requestHeaders">
+                <div>
+                    <label for="requestContentTypeHeader">Content-Type:</label>
+                    <span class="paddingLeft10" id="requestContentTypeHeader"></span>
+                </div>
+            </div>
+            <div class="requestBody">
+                <code id="requestBodyText">Request Body</code>
+            </div>
+        </fieldset>
+
+        <fieldset class="response">
+            <legend>Response</legend>
+            <div class="responseStatus">
+                <label for="responseStatusText">Status:</label>
+                <span class="paddingLeft10" id="responseStatusText"></span>
+            </div>
+            <div id="responseHeaders">
+                <div>
+                    <label for="contentTypeHeader">Content-Type:</label>
+                    <span class="paddingLeft10" id="contentTypeHeader"></span>
+                </div>
+            </div>
+            <div class="responseBody">
+                <code id="responseBodyText">Response Body</code>
+            </div>
+        </fieldset>
+    </section>
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="js/main.js"></script>
+</html>

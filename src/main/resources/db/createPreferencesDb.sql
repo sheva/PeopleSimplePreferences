@@ -1,0 +1,28 @@
+CREATE TABLE IF NOT EXISTS PERSON(
+    personId INT PRIMARY KEY UNIQUE,
+    firstName VARCHAR NOT NULL,
+    lastName VARCHAR,
+    dateOfBirth VARCHAR NOT NULL,
+    CONSTRAINT PERSON_UNIQUE UNIQUE (firstName, lastName, dateOfBirth)
+);
+
+CREATE TABLE IF NOT EXISTS FOOD(
+    foodId INT PRIMARY KEY UNIQUE,
+    name VARCHAR NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS PERSON_COLOR_PREFERENCES(
+    personId INT NOT NULL,
+    color CHAR(20) NOT NULL,
+    PRIMARY KEY (personId, color),
+    CONSTRAINT COLOR_RANGE CHECK (color IN ("red", "orange", "yellow", "green", "blue", "indigo", "violet"))
+);
+
+CREATE TABLE IF NOT EXISTS PERSON_FOOD_PREFERENCES(
+    id INT PRIMARY KEY UNIQUE,
+    personId INT NOT NULL,
+    foodId INT NOT NULL,
+    FOREIGN KEY (personId) REFERENCES PERSON(personId),
+    FOREIGN KEY (foodId) REFERENCES FOOD(foodId),
+    CONSTRAINT PERSON_FOOD_UNIQUE UNIQUE (personId, foodId)
+);
