@@ -1,4 +1,4 @@
-var rootURL = "../../preferences/";
+var rootURL = "/preferences/";
 
  $.ajaxSetup({
     success: renderResponse,
