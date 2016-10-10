@@ -7,7 +7,9 @@ Built using:
 
 * Jersey
 * Grizzly
+* SQLite
 * Hibernate
+* Gson
 * Maven
 * JUnit
 * JBehave
