@@ -3,9 +3,8 @@ Simple People Preferences
 
 Simple RESTful API to manage personal info (name, age) and preferences (food, color).
 
-Built with:
+Built using:
 
-* Java
 * Jersey
 * Grizzly
 * Hibernate
@@ -25,8 +24,6 @@ I've implemented date of birth instead of age, because age is dynamic value. But
 I've implemented multiple preferences for color & food. Color preferences are sub-set of pre-defined colors so I've used `Enum`. Food preferences are user-generated so I've used a separate DB table & relation one-to-many.
 
 I've added constraint for unique first name + last name + date of birth. You can't create two persons with same fields.
-
-Now let's try it in action.
 
 ## Try it!
 
@@ -77,9 +74,7 @@ Update person details:
 
     curl -i -X PUT -H 'Content-Type: application/json' -d '{"id":1,"firstName":"John","lastName":"Smith","dateOfBirth":"1988-12-23","favoriteColor":["yellow"],"favoriteFood":[{"name":"chocolate"}]}' http://localhost:8080/preferences/people/1
 
-There is the same validation for the person update as for its creation.
-
-If you'll try to update _not existing person_ - it will return `HTTP 404 Not Found`.
+There is the same validation for the person update as for its creation. If you'll try to update _not existing person_ - it will return `HTTP 404 Not Found`.
 
 Delete person:
 
@@ -125,19 +120,15 @@ First you need to choose HTTP method, then - fill the form & send.
 
 ## Tests
 
-I use JUnit for unit tests and JBehave for application-level tests.
-
-Build & test:
+I use JUnit for unit tests and JBehave for application-level tests. Build & test:
 
     mvn clean test integration-test
     
-View the results of JBehave tests go to "target/jbehave/view/reports.html".
+View the results of JBehave tests goto "target/jbehave/view/reports.html".
 
 ## Docs
 
-Swagger.io used to build RESTful API documentation.
-
-Build the docs:
+Swagger.io used to build RESTful API documentation. Build the docs:
 
     mvn compile
 
