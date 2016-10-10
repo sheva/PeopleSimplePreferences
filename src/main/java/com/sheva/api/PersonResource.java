@@ -77,9 +77,10 @@ public class PersonResource {
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @ApiOperation(value = "Creates person entity.", consumes = "application/json | application/xml",
-            notes = "Create new person with specified information in request", response = URI.class)
+            notes = "Create new person with specified information in request",
+            responseHeaders = @ResponseHeader(name = "Location", description = "path for newly created person", response = URI.class))
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Success with creation of new person entity with attached food", response = URI.class),
+            @ApiResponse(code = 201, message = "Success with creation of new person entity with attached food"),
             @ApiResponse(code = 400, message = "Invalid data request"),
             @ApiResponse(code = 409, message = "Food with given data already exist"),
             @ApiResponse(code = 500, message = "Internal server error") }

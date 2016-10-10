@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 public class Database {
 
     private static final Logger logger = Logger.getLogger(Database.class.getName());
-
     private static Database instance;
     private final SessionFactory factory;
 

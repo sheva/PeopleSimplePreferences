@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import javax.ws.rs.WebApplicationException;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -80,8 +81,21 @@ public class PersonDAO implements AbstractDAO<Person> {
             person.setDateOfBirth(personFromUpdate.getDateOfBirth());
             person.setColor(personFromUpdate.getColor());
 
-            if (!person.getFood().containsAll(personFromUpdate.getFood())) {
-                person.setFood(personFromUpdate.getFood());
+            Set<Food> food = person.getFood();
+            for (Food candidate : personFromUpdate.getFood()) {
+                if (!food.contains(candidate)) {
+                    food.add(candidate);
+                }
+            }
+
+            for (Food candidate : personFromUpdate.getFood()) {
+                if (!food.contains(candidate)) {
+                    food.remove(candidate);
+                }
+            }
+
+            if (personFromUpdate.getFood().isEmpty()) {
+                person.setFood(new HashSet<>());
             }
 
             update(session, person);

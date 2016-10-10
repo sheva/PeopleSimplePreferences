@@ -129,4 +129,3 @@ public class PersonMessageBodyHandler implements MessageBodyWriter<Person>, Mess
         person.setFood(newFavoriteFood);
     }
 }
-

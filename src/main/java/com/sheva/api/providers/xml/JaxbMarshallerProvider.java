@@ -1,6 +1,5 @@
 package com.sheva.api.providers.xml;
 
-import com.sheva.data.Color;
 import com.sheva.data.Food;
 import com.sheva.data.Person;
 
@@ -26,7 +25,6 @@ public class JaxbMarshallerProvider {
         try {
             jaxbContext = JAXBContext.newInstance(Food.class, Person.class);
         } catch (JAXBException jaxbException) {
-
             logger.log(Level.SEVERE, jaxbException.getMessage(), jaxbException);
             throw new WebApplicationException(jaxbException.getMessage(), jaxbException);
         }
@@ -49,5 +47,3 @@ public class JaxbMarshallerProvider {
         return unmarshaller;
     }
 }
-
-

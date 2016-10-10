@@ -28,7 +28,9 @@ public class LocalDateJsonAdapter implements JsonSerializer<LocalDate>, JsonDese
         if (!(jsonElement instanceof JsonPrimitive)) {
             throw new JsonParseException("The date should be a string value");
         }
+
         String dateStr = jsonElement.getAsString();
+
         try {
             return LocalDate.parse(dateStr, DateTimeFormatter.ofPattern(DATE_FORMAT));
         } catch (DateTimeParseException e) {

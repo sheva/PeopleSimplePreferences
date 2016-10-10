@@ -1,6 +1,5 @@
 package com.sheva.api.exceptions;
 
-
 import javax.ws.rs.WebApplicationException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,7 +24,7 @@ public class EntityNotFoundException extends WebApplicationException {
         this(clazz, key, value, null);
     }
 
-    public EntityNotFound getException(){
+    public EntityNotFound getException() {
         return exception;
     }
 

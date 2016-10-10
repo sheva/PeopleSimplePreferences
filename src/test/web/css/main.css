@@ -92,11 +92,11 @@ input:text {
     min-height: 800px;
 }
 
-.paddingLeft10 {
+.requestResponseSpan {
     padding-left: 10px;
 }
 
-.mediaType{
+.mediaType {
     margin-top: 10px;
 }
 
@@ -124,4 +124,3 @@ input:text {
 .send {
     float:right
 }
-

@@ -48,7 +48,7 @@ public class DatabaseTestHelper {
                         transaction.rollback();
 
                     if (e instanceof ConstraintViolationException && ((ConstraintViolationException) e).getConstraintName().contains("UNIQUE")) {
-                        logger.log(Level.WARNING, "Seams like test data was already loaded.");
+                        logger.log(Level.WARNING, "Seams like test data was already loaded");
                         break;
                     }
 

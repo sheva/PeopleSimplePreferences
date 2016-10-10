@@ -43,7 +43,6 @@ public class FoodDAO implements AbstractDAO<Food> {
             }
 
             food.setName(name);
-
             session.update(food);
 
             return food;

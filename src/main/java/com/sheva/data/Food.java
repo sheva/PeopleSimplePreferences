@@ -84,10 +84,4 @@ public class Food implements Serializable {
     public int hashCode() {
         return name.hashCode();
     }
-
-    public Food clone(Food food) {
-        Food clone = new Food();
-        clone.setName(food.getName());
-        return clone;
-    }
 }

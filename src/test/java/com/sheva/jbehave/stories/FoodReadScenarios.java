@@ -82,4 +82,3 @@ public class FoodReadScenarios extends Steps {
         assertEquals(mediaType, response.getMediaType().toString());
     }
 }
-

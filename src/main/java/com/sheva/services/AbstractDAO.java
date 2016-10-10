@@ -45,18 +45,14 @@ interface AbstractDAO<E> {
 
         try (Session session = getFactory().openSession()) {
             transaction = session.beginTransaction();
-
             T result = query.execute(session);
-
             transaction.commit();
             return result;
-
         } catch (PersistenceException e) {
             if (transaction != null)
                 transaction.rollback();
 
             if (e.getCause() instanceof ConstraintViolationException) {
-
                 ConstraintViolationException constraint = (ConstraintViolationException) e.getCause();
                 getLogger().log(Level.WARNING, e.toString(), e);
 
@@ -66,6 +62,7 @@ interface AbstractDAO<E> {
                     SQLException sqlException = ((ConstraintViolationException) e.getCause()).getSQLException();
                     throw new InvalidRequestDataException(getEntityClass().getSimpleName(), null, null, sqlException);
                 }
+
                 throw e;
             }
 
@@ -97,15 +94,14 @@ interface AbstractDAO<E> {
         return executeQuery((Session session) -> {
 
             StringBuilder query = new StringBuilder();
-
             String entityClassName = getEntityClass().getSimpleName();
             query.append("from ").append(entityClassName);
-
             int index = 0;
-            for (String key : params.keySet()) {
 
+            for (String key : params.keySet()) {
                 String property = StringUtils.trimToEmpty(key);
                 Object value = params.get(key);
+
                 if (value instanceof String) {
                     value = StringUtils.trimToNull((String)value);
                 }
@@ -130,9 +126,9 @@ interface AbstractDAO<E> {
             Query hibQuery = session.createQuery(query.toString());
 
             for (String key : params.keySet()) {
-
                 String property = StringUtils.trimToEmpty(key);
                 Object value = params.get(key);
+
                 if (value instanceof String) {
                     value = StringUtils.trimToNull((String)value);
                 }

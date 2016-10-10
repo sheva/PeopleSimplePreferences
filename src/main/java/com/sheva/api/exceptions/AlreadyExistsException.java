@@ -25,7 +25,7 @@ public class AlreadyExistsException extends WebApplicationException {
         this(clazz, null);
     }
 
-    public AlreadyExistsException.AlreadyExists getException(){
+    public AlreadyExistsException.AlreadyExists getException() {
         return exception;
     }
 

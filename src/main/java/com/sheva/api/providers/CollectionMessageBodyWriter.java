@@ -107,9 +107,7 @@ abstract class CollectionMessageBodyWriter<E> {
         return new QName(name);
     }
 
-    protected void appendCustomToXml(E entity, Element element) {
-    }
+    protected void appendCustomToXml(E entity, Element element) {}
 
-    protected void appendCustomToJson(Gson gson, E entity, JsonElement element) {
-    }
+    protected void appendCustomToJson(Gson gson, E entity, JsonElement element) {}
 }
