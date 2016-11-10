@@ -9,6 +9,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
+ * Entity already exists exception response mapper.
  *
  * Created by Sheva on 10/4/2016.
  */

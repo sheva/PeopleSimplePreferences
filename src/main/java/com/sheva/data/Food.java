@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
- * Food POJO class. Entity relates to FOOD table.
+ * Entity represent FOOD table.
  *
  * Created by Sheva on 9/28/2016.
  */
@@ -77,7 +77,6 @@ public class Food implements Serializable {
         Food food = (Food) o;
 
         return name.equals(food.name);
-
     }
 
     @Override

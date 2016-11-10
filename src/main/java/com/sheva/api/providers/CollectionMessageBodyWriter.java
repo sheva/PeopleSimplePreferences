@@ -36,18 +36,15 @@ abstract class CollectionMessageBodyWriter<E> {
         try {
             if (MediaType.APPLICATION_JSON_TYPE.isCompatible(mediaType)) {
                 writeJson(list, outputStream);
-            }
-            else if (MediaType.APPLICATION_XML_TYPE.isCompatible(mediaType)) {
+            } else if (MediaType.APPLICATION_XML_TYPE.isCompatible(mediaType)) {
                 writeXml(list, outputStream);
-            }
-            else {
+            } else {
                 getLogger().log(Level.WARNING, "Request with not supported media type was called: " + mediaType);
                 throw new WebApplicationException("Unsupported media type " + mediaType.toString());
             }
         } catch (IOException e) {
-
-            getLogger().log(Level.SEVERE, String.format("Unexpected exception occurred during writing to response of object %s.", list), e);
-            throw new WebApplicationException("Unexpected exception occurred during writing to response.", e);
+            getLogger().log(Level.SEVERE, "Unexpected exception occurred during writing to response of object " + list, e);
+            throw new WebApplicationException("Unexpected exception occurred during writing to response", e);
         }
     }
 
@@ -75,7 +72,7 @@ abstract class CollectionMessageBodyWriter<E> {
             try (StringWriter stringWriter = new StringWriter()) {
                 XMLStreamWriter xmlStream = XMLOutputFactory.newInstance().createXMLStreamWriter(stringWriter);
 
-                JaxbMarshallerProvider.getInstance().getMarshaller().marshal(item, xmlStream);
+                JaxbMarshallerProvider.INSTANCE.getMarshaller().marshal(item, xmlStream);
 
                 Document personDoc = DocumentHelper.parseText(stringWriter.toString());
                 Element rootElement = personDoc.getRootElement();
@@ -84,9 +81,8 @@ abstract class CollectionMessageBodyWriter<E> {
                 root.add(rootElement.detach());
 
             } catch (JAXBException | IOException | XMLStreamException | DocumentException exception) {
-
-                getLogger().log(Level.SEVERE, String.format("Error serializing object %s to the output stream.", item), exception);
-                throw new WebApplicationException("Error serializing to the output stream.", exception);
+                getLogger().log(Level.SEVERE, String.format("Error serializing object %s to the output stream", item), exception);
+                throw new WebApplicationException("Error serializing to the output stream", exception);
             }
         });
 
@@ -98,12 +94,10 @@ abstract class CollectionMessageBodyWriter<E> {
     protected abstract Logger getLogger();
 
     protected QName buildRootElement() {
-        ApplicationHelper helper = new ApplicationHelper();
-
-        XmlRootElementCollection xmlAnnotation = helper.getAnnotation(getEntityClass(), XmlRootElementCollection.class);
+        XmlRootElementCollection xmlAnnotation = ApplicationHelper.getAnnotation(getEntityClass(), XmlRootElementCollection.class);
         String name = xmlAnnotation != null ? StringUtils.trim(xmlAnnotation.name()) : getEntityClass().getSimpleName() + "s";
 
-        getLogger().log(Level.FINE, String.format("XML node name set to '%s' for collection of %s.", name, getEntityClass().getSimpleName()));
+        getLogger().log(Level.FINE, String.format("XML node name set to '%s' for collection of %s", name, getEntityClass().getSimpleName()));
         return new QName(name);
     }
 

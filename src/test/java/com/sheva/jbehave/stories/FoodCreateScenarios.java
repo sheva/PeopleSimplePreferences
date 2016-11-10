@@ -43,7 +43,7 @@ public class FoodCreateScenarios extends Steps {
         assertTrue(findFoodByName(name).isEmpty());
     }
 
-    @Then("bad request error $statusCode returned on attempt to create food entity.")
+    @Then("method not allowed error $statusCode returned on attempt to create food entity.")
     public void thenMethodNotSupportedForCreate(@Named("statusCode") int statusCode) throws Exception {
         Response response = requestBuilder.invoke();
         assertEquals(statusCode, response.getStatus());

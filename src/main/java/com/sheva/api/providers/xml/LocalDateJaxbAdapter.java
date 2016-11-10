@@ -1,13 +1,13 @@
 package com.sheva.api.providers.xml;
 
 import com.sheva.api.exceptions.InvalidRequestDataException;
-import com.sheva.db.Database;
+import com.sheva.db.PropertiesFileResolver;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +21,7 @@ public class LocalDateJaxbAdapter extends XmlAdapter<String, LocalDate> {
 
     private static final Logger logger = Logger.getLogger(LocalDateJaxbAdapter.class.getName());
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(Database.getInstance().getDatabaseDateFormat());
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(PropertiesFileResolver.INSTANCE.getDatabaseDateFormat());
 
     @Override
     public LocalDate unmarshal(String localDateStr) throws Exception {

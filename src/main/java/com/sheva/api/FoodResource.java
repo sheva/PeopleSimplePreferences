@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Resource class for Food entities.
+ * Resource class for {@link com.sheva.data.Food} elements.
  *
  * Created by Sheva on 9/28/2016.
  */
@@ -22,7 +22,6 @@ import java.util.logging.Logger;
 public class FoodResource {
 
     private static final Logger logger = Logger.getLogger(FoodResource.class.getName());
-
     private static final String ID_PATH_PATTERN = "/{id: [0-9]+}";
 
     private FoodDAO dao = new FoodDAO();

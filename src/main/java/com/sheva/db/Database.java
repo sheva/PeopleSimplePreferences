@@ -3,35 +3,34 @@ package com.sheva.db;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import java.util.logging.Logger;
+import java.util.Properties;
 
 /**
  * Class provides connection with database.
  *
  * Created by Sheva on 9/29/2016.
  */
-public class Database {
+public enum Database {
 
-    private static final Logger logger = Logger.getLogger(Database.class.getName());
-    private static Database instance;
+    INSTANCE;
+
     private final SessionFactory factory;
 
-    private Database() {
-        factory = new Configuration().configure().buildSessionFactory();
-    }
-
-    public static synchronized Database getInstance() {
-        if (instance == null) {
-            instance = new Database();
-        }
-        return instance;
+    Database() {
+        Configuration configuration = new Configuration() {
+            @Override
+            public Configuration mergeProperties(Properties properties) {
+                properties.entrySet().forEach(
+                        propFromFile -> getProperties().entrySet().stream().
+                                filter(property -> property.getValue()!= null && property.getValue().toString().equalsIgnoreCase("${" + propFromFile.getKey() + "}")).
+                                forEach(property -> setProperty((String) property.getKey(), (String) propFromFile.getValue())));
+                return this;
+            }
+        }.configure().mergeProperties(PropertiesFileResolver.INSTANCE.getProperties());
+        factory = configuration.buildSessionFactory();
     }
 
     public SessionFactory getFactory() {
         return factory;
-    }
-
-    public String getDatabaseDateFormat() {
-        return factory.getProperties().get("hibernate.connection.date_string_format").toString(); // TODO: set this property on application level. and add placeholder to hibernate.cfg.xml
     }
 }

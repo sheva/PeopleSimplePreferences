@@ -13,28 +13,19 @@ import java.util.logging.Logger;
  *
  * Created by Sheva on 10/4/2016.
  */
-public class JaxbMarshallerProvider {
+public enum JaxbMarshallerProvider {
 
-    private static final Logger logger = Logger.getLogger(JaxbMarshallerProvider.class.getName());
-
-    private static JaxbMarshallerProvider instance;
+    INSTANCE;
 
     private final JAXBContext jaxbContext;
 
-    private JaxbMarshallerProvider() {
+    JaxbMarshallerProvider() {
         try {
             jaxbContext = JAXBContext.newInstance(Food.class, Person.class);
         } catch (JAXBException jaxbException) {
-            logger.log(Level.SEVERE, jaxbException.getMessage(), jaxbException);
+            Logger.getLogger(JaxbMarshallerProvider.class.getName()).log(Level.SEVERE, jaxbException.getMessage(), jaxbException);
             throw new WebApplicationException(jaxbException.getMessage(), jaxbException);
         }
-    }
-
-    public static synchronized JaxbMarshallerProvider getInstance() {
-        if (instance == null) {
-            instance = new JaxbMarshallerProvider();
-        }
-        return instance;
     }
 
     public Marshaller getMarshaller() throws JAXBException {

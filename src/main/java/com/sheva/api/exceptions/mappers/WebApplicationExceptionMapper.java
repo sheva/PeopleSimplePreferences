@@ -8,7 +8,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
- *  Process bad request data exceptions.
+ * Mapper class for bad request data exceptions.
  *
  * Created by Sheva on 10/7/2016.
  */
@@ -18,6 +18,6 @@ public class WebApplicationExceptionMapper implements ExceptionMapper<WebApplica
 
     @Override
     public Response toResponse(WebApplicationException e) {
-        return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        return e.getResponse();
     }
 }

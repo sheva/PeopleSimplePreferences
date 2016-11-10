@@ -1,6 +1,7 @@
 package com.sheva;
 
 import com.sheva.db.DatabaseTestHelper;
+import com.sheva.utils.LoggingConfiguration;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -36,6 +37,7 @@ public class ServerStarter {
     }
 
     public static void main(String... args) throws Exception {
+        LoggingConfiguration.configure();
         HttpServer server = startServer();
         System.out.println(String.format("Application started at %s\nTest page available at %s\nHit enter to stop it...",
                 BASE_URI, HOST_PORT + "test/web/"));

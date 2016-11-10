@@ -17,6 +17,7 @@ import javax.ws.rs.WebApplicationException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,8 +50,9 @@ interface AbstractDAO<E> {
             transaction.commit();
             return result;
         } catch (PersistenceException e) {
-            if (transaction != null)
+            if (transaction != null) {
                 transaction.rollback();
+            }
 
             if (e.getCause() instanceof ConstraintViolationException) {
                 ConstraintViolationException constraint = (ConstraintViolationException) e.getCause();
@@ -92,23 +94,23 @@ interface AbstractDAO<E> {
     @SuppressWarnings("unchecked")
     default List<E> searchByParams(Map<String, Object> params) throws HibernateException {
         return executeQuery((Session session) -> {
-
             StringBuilder query = new StringBuilder();
             String entityClassName = getEntityClass().getSimpleName();
             query.append("from ").append(entityClassName);
-            int index = 0;
 
-            for (String key : params.keySet()) {
-                String property = StringUtils.trimToEmpty(key);
-                Object value = params.get(key);
+            final AtomicInteger index = new AtomicInteger(0);
+            params.entrySet().stream().forEachOrdered(param -> {
+                Object value = param.getValue();
+                String property = param.getKey();
 
                 if (value instanceof String) {
                     value = StringUtils.trimToNull((String)value);
                 }
+                if (value == null) {
+                    return;
+                }
 
-                if (value == null) continue;
-
-                if (index == 0) {
+                if (index.getAndIncrement() == 0) {
                     query.append(" e where");
                 } else {
                     query.append(" and ");
@@ -119,32 +121,27 @@ interface AbstractDAO<E> {
                 } else {
                     query.append(" e.").append(property).append("=:").append(property);
                 }
-
-                index++;
-            }
+            });
 
             Query hibQuery = session.createQuery(query.toString());
 
-            for (String key : params.keySet()) {
-                String property = StringUtils.trimToEmpty(key);
-                Object value = params.get(key);
+            params.entrySet().forEach(param -> {
+                Object value = param.getValue();
+                String property = param.getKey();
 
                 if (value instanceof String) {
-                    value = StringUtils.trimToNull((String)value);
+                    value = StringUtils.trimToNull((String) value);
+                }
+                if (value == null) {
+                    return;
                 }
 
-                if (value == null) continue;
-
-                if (value instanceof String) {
-                    hibQuery.setParameter(property, "%" + value + "%");
-                } else {
-                    hibQuery.setParameter(property, value);
-                }
-            }
+                hibQuery.setParameter(property, (value instanceof String) ? "%" + value + "%" : value);
+            });
 
             getLogger().log(Level.FINE, String.format("Query for %s constructed %s", getEntityClass(), hibQuery.getQueryString()));
-
             return hibQuery.list();
         });
     }
+
 }

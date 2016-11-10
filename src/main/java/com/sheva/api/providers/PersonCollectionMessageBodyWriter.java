@@ -29,7 +29,7 @@ public class PersonCollectionMessageBodyWriter extends CollectionMessageBodyWrit
 
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
-        return List.class.isAssignableFrom(aClass) && Person.class == new ApplicationHelper().getTypeOfParameterByIndexForClass(type, 0);
+        return List.class.isAssignableFrom(aClass) && Person.class == ApplicationHelper.getTypeOfParameterByIndexForClass(type, 0);
     }
 
     @Override

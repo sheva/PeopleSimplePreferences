@@ -77,10 +77,12 @@ public class PersonMessageBodyHandler implements MessageBodyWriter<Person>, Mess
         }
     }
 
+
     private Person readXml(InputStream inputStream) throws WebApplicationException {
         try {
-            Person person = (Person) JaxbMarshallerProvider.getInstance().getUnmarshaller().unmarshal(inputStream);
+            Person person = (Person) JaxbMarshallerProvider.INSTANCE.getUnmarshaller().unmarshal(inputStream);
             resetFoodElements(person);
+            logger.log(Level.FINEST, String.format("Deserialized from XML Person.class object <person:id=%d> : %s", person.getId(), person));
             return person;
         } catch (JAXBException jaxbException) {
             Throwable cause = jaxbException.getCause();
@@ -110,13 +112,14 @@ public class PersonMessageBodyHandler implements MessageBodyWriter<Person>, Mess
     private void writeJson(Person person, OutputStream outputStream) throws IOException {
         Gson gson = new GsonBuilder().create();
         String json = gson.toJson(person);
-        logger.log(Level.FINEST, String.format("Constructed object for <person:id=%d> : %s", person.getId(), json));
         outputStream.write(json.getBytes());
+        logger.log(Level.FINEST, String.format("Serialized object for <person:id=%d> : %s", person.getId(), json));
     }
 
     private void writeXml(Person person, OutputStream outputStream) {
         try {
-            JaxbMarshallerProvider.getInstance().getMarshaller().marshal(person, outputStream);
+            JaxbMarshallerProvider.INSTANCE.getMarshaller().marshal(person, outputStream);
+            logger.log(Level.FINEST, String.format("Serialized object for <person:id=%d> : %s", person.getId(), person));
         } catch (JAXBException jaxbException) {
             logger.log(Level.SEVERE, String.format("Error constructing object for <person:id=%d> : %s", person.getId(), jaxbException));
             throw new WebApplicationException("Error serializing a Person.class to the output stream", jaxbException);

@@ -9,6 +9,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
+ * Process bad request data exceptions.
  *
  * Created by Sheva on 10/7/2016.
  */

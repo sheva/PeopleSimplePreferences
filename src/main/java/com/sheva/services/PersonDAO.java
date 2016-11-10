@@ -29,7 +29,7 @@ public class PersonDAO implements AbstractDAO<Person> {
 
     @Override
     public SessionFactory getFactory() {
-        return Database.getInstance().getFactory();
+        return Database.INSTANCE.getFactory();
     }
 
     @Override
@@ -81,24 +81,13 @@ public class PersonDAO implements AbstractDAO<Person> {
             person.setDateOfBirth(personFromUpdate.getDateOfBirth());
             person.setColor(personFromUpdate.getColor());
 
-            Set<Food> food = person.getFood();
-            for (Food candidate : personFromUpdate.getFood()) {
-                if (!food.contains(candidate)) {
-                    food.add(candidate);
-                }
-            }
-
-            for (Food candidate : personFromUpdate.getFood()) {
-                if (!food.contains(candidate)) {
-                    food.remove(candidate);
-                }
-            }
-
-            if (personFromUpdate.getFood().isEmpty()) {
-                person.setFood(new HashSet<>());
-            }
+            Set<Food> oldFood = person.getFood();
+            Set<Food> newFood = new HashSet<>(personFromUpdate.getFood());
+            oldFood.addAll(newFood);
+            oldFood.retainAll(newFood);
 
             update(session, person);
+
             return person;
         });
     }
@@ -114,6 +103,7 @@ public class PersonDAO implements AbstractDAO<Person> {
             }
 
             delete(session, person);
+
             return person;
         });
     }
@@ -141,7 +131,7 @@ public class PersonDAO implements AbstractDAO<Person> {
     }
 
     private void delete(final Session predefSession, Person person) throws HibernateException {
-        executeQuery((Session session)-> {
+        executeQuery((Session session) -> {
             if (predefSession != null) session = predefSession;
             session.delete(person);
             return person;
@@ -149,7 +139,7 @@ public class PersonDAO implements AbstractDAO<Person> {
     }
 
     private Person update(final Session predefSession, Person person) throws HibernateException {
-        return executeQuery((Session session)-> {
+        return executeQuery((Session session) -> {
             if (predefSession != null) session = predefSession;
             session.update(person);
             return person;
@@ -157,7 +147,7 @@ public class PersonDAO implements AbstractDAO<Person> {
     }
 
     private Person save(final Session predefSession, Person person) throws HibernateException {
-        return executeQuery((Session session)-> {
+        return executeQuery((Session session) -> {
             if (predefSession != null) session = predefSession;
             session.save(person);
             return person;

@@ -3,7 +3,7 @@ package com.sheva.api.providers.json;
 import com.google.gson.*;
 import com.sheva.api.exceptions.InvalidRequestDataException;
 import com.sheva.api.providers.xml.JaxbMarshallerProvider;
-import com.sheva.db.Database;
+import com.sheva.db.PropertiesFileResolver;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
@@ -21,12 +21,13 @@ public class LocalDateJsonAdapter implements JsonSerializer<LocalDate>, JsonDese
 
     private static final Logger logger = Logger.getLogger(JaxbMarshallerProvider.class.getName());
 
-    private static final String DATE_FORMAT = Database.getInstance().getDatabaseDateFormat();
+    private static final String DATE_FORMAT = PropertiesFileResolver.INSTANCE.getDatabaseDateFormat();
 
     @Override
     public LocalDate deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         if (!(jsonElement instanceof JsonPrimitive)) {
-            throw new JsonParseException("The date should be a string value");
+            logger.log(Level.WARNING, "The date should be a string value : " + jsonElement);
+            throw new JsonParseException("The date should be a string value : " + jsonElement);
         }
 
         String dateStr = jsonElement.getAsString();

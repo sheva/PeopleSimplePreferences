@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Resource for operating with person entities.
+ * Resource for operating with {@link com.sheva.data.Person} elements.
  *
  * Created by Sheva on 9/28/2016.
  */

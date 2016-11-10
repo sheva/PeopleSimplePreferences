@@ -13,7 +13,6 @@
     <properties>
         <main.resources.path>src/main/resources</main.resources.path>
         <test.resources.path>src/test/resources</test.resources.path>
-        <db.name>preferences.db</db.name>
     </properties>
 
     <dependencies>
@@ -88,6 +87,24 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>${main.resources.path}/preferences.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5</version>
@@ -131,7 +148,7 @@
                 </dependencies>
 
                 <configuration>
-                    <driver>org.sqlite.JDBC</driver>
+                    <driver>${hibernate.connection.driver_class}</driver>
                 </configuration>
 
                 <executions>
@@ -142,7 +159,7 @@
                             <goal>execute</goal>
                         </goals>
                         <configuration>
-                            <url>jdbc:sqlite:${project.basedir}/${db.name}</url>
+                            <url>${hibernate.connection.url}</url>
                             <autocommit>true</autocommit>
                             <escapeProcessing>false</escapeProcessing>
                             <srcFiles>${main.resources.path}/db/createPreferencesDb.sql</srcFiles>
@@ -155,7 +172,8 @@
                             <goal>execute</goal>
                         </goals>
                         <configuration>
-                            <url>jdbc:sqlite:${project.basedir}/${db.name}</url>
+
+                            <url>${hibernate.connection.url}</url>
                             <autocommit>true</autocommit>
                             <escapeProcessing>false</escapeProcessing>
                             <fileset>

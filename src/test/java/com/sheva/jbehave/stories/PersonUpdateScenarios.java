@@ -3,7 +3,7 @@ package com.sheva.jbehave.stories;
 import com.sheva.api.exceptions.AlreadyExistsException;
 import com.sheva.api.exceptions.EntityNotFoundException;
 import com.sheva.data.Person;
-import com.sheva.db.Database;
+import com.sheva.db.PropertiesFileResolver;
 import com.sheva.services.PersonDAO;
 import org.jbehave.core.annotations.*;
 import org.jbehave.core.steps.Steps;
@@ -17,10 +17,7 @@ import java.util.List;
 
 import static com.sheva.db.DatabaseTestHelper.*;
 import static com.sheva.jbehave.stories.AppStories.getTarget;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 
 /**
@@ -30,7 +27,7 @@ import static org.junit.Assert.assertNull;
  */
 public class PersonUpdateScenarios extends Steps {
 
-    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(Database.getInstance().getDatabaseDateFormat());
+    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(PropertiesFileResolver.INSTANCE.getDatabaseDateFormat());
 
     private Invocation requestBuilder;
 

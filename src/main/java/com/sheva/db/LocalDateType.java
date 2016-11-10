@@ -23,7 +23,7 @@ public class LocalDateType implements UserType {
 
     private static final Logger logger = Logger.getLogger(LocalDateType.class.getName());
 
-    private static final String DATE_FORMAT = Database.getInstance().getDatabaseDateFormat();
+    private static final String DATE_FORMAT = PropertiesFileResolver.INSTANCE.getDatabaseDateFormat();
 
     @Override
     public int[] sqlTypes() {

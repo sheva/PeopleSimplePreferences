@@ -4,7 +4,7 @@ Scenario: Attempt to delete specific food.
 
 Given DELETE request send for specific food with <id>. Request media type supported <mediaType>.
 When food record with <id> exists in database.
-Then bad request error 400 returned on attempt to delete food entity.
+Then method not allowed error 405 returned on attempt to delete food entity.
 
 Examples:
 |id|mediaType|

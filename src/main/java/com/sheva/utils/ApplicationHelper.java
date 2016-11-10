@@ -15,19 +15,21 @@ public final class ApplicationHelper {
 
     private final static Logger logger = Logger.getLogger(ApplicationHelper.class.getName());
 
-    public Type getTypeOfParameterByIndexForClass(Type type, int typeIndex) {
+    private ApplicationHelper() {}
+
+    public static Type getTypeOfParameterByIndexForClass(Type type, int typeIndex) {
         return type instanceof ParameterizedType ? ((ParameterizedType)type).getActualTypeArguments()[typeIndex] : null;
     }
 
-    public <A extends Annotation> A getAnnotation(Class clazz, Class<? extends Annotation> annotation) {
+    public static <A extends Annotation> A getAnnotation(Class clazz, Class<? extends Annotation> annotation) {
         return clazz != null && clazz.isAnnotationPresent(annotation) ? (A) clazz.getAnnotation(annotation) : null;
     }
 
-    public Class getClassOfParameterByIndexForClass(Type type, int typeIndex) {
+    public static Class getClassOfParameterByIndexForClass(Type type, int typeIndex) {
        return getClassByType(getTypeOfParameterByIndexForClass(type, typeIndex));
     }
 
-    public Class getClassByType(Type type) {
+    public static Class getClassByType(Type type) {
         try {
             return Class.forName(type.getTypeName());
         } catch (ClassNotFoundException exception) {

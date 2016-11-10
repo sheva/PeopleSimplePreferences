@@ -76,7 +76,7 @@ public class Person implements Serializable {
             allowableValues = "red, orange, yellow, green, blue, indigo, violet")
     private Set<Color> color = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinTable(
             name="PERSON_FOOD_PREFERENCES",
             joinColumns = @JoinColumn( name="personId"),
@@ -153,22 +153,6 @@ public class Person implements Serializable {
 
     public void setFood(Set<Food> food) {
         this.food = food;
-    }
-
-    public void addFavoriteFood(Food food) {
-        this.food.add(food);
-    }
-
-    public void removeFavoriteFood(Food toRemove) {
-        this.food.remove(toRemove);
-    }
-
-    public void addFavoriteColor(Color color) {
-        this.color.add(color);
-    }
-
-    public void removeFavoriteColor(Color color) {
-        this.color.remove(color);
     }
 
     @Override

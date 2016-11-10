@@ -43,7 +43,7 @@ public class FoodDeleteScenarios extends Steps {
         assertNotNull(findFoodById(id));
     }
 
-    @Then("bad request error $statusCode returned on attempt to delete food entity.")
+    @Then("method not allowed error $statusCode returned on attempt to delete food entity.")
     public void thenMethodNotSupportedForCreate(@Named("statusCode") int statusCode) throws Exception {
         Response response = requestBuilder.invoke();
         assertEquals(statusCode, response.getStatus());

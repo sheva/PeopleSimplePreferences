@@ -125,17 +125,17 @@ function httpButtonsEvent() {
     $('#get').click(function () {
         configureForGet();
     });
-     $('#post').click(function () {
+    $('#post').click(function () {
         setFieldsStatus(true, false, false, false, false, false, false);
         $('#send').off().on("click", createPerson);
         $('#fields input').each(function() { $(this).off() });
     });
-     $('#put').click(function () {
+    $('#put').click(function () {
         setFieldsStatus(false, false, false, false, false, false, false);
         $('#send').off().on("click", updatePerson);
         $('#fields input').each(function() { $(this).off() });
     });
-     $('#delete').click(function () {
+    $('#delete').click(function () {
         setFieldsStatus(false, true, true, true, true, true, true);
         $('#send').off().on("click", deletePerson);
         $('#fields input').each(function() { $(this).off() });
@@ -145,7 +145,7 @@ function httpButtonsEvent() {
 function configureForGet() {
     setFieldsStatus(false, false, false, true, true, true, true);
     $('#send').off().on("click", decideGetBehavior);
-     $('#id').off().on('input',function() {
+    $('#id').off().on('input',function() {
         if ($(this).val()) {
             $('#firstName').prop('disabled', true);
             $('#lastName').prop('disabled', true);
@@ -154,12 +154,12 @@ function configureForGet() {
             $('#lastName').prop('disabled', false);
         }
     });
-     $('#firstName').off().on('input',function() {
+    $('#firstName').off().on('input',function() {
         if ($(this).val()) {
             $('#id').prop('disabled', true);
          }
     });
-     $('#lastName').off().on('input',function() {
+    $('#lastName').off().on('input',function() {
         if ($(this).val()) {
             $('#id').prop('disabled', true);
          }

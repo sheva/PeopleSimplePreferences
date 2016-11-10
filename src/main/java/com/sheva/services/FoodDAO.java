@@ -24,7 +24,7 @@ public class FoodDAO implements AbstractDAO<Food> {
 
     @Override
     public SessionFactory getFactory() {
-        return Database.getInstance().getFactory();
+        return Database.INSTANCE.getFactory();
     }
 
     @Override

@@ -8,7 +8,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
- * Exception for entity not found in database ever
+ * Exception for entity not found in database ever.
+ *
  * Created by Sheva on 10/2/2016.
  */
 public class EntityNotFoundException extends WebApplicationException {

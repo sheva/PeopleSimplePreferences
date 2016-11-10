@@ -5,6 +5,7 @@ import com.sheva.data.Color;
 import com.sheva.data.Food;
 import com.sheva.data.Person;
 import com.sheva.db.Database;
+import com.sheva.db.PropertiesFileResolver;
 import com.sheva.services.PersonDAO;
 import org.jbehave.core.annotations.*;
 import org.jbehave.core.steps.Steps;
@@ -27,7 +28,7 @@ import static org.junit.Assert.assertNull;
 
 public class PersonCreateScenarios extends Steps {
 
-    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(Database.getInstance().getDatabaseDateFormat());
+    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(PropertiesFileResolver.INSTANCE.getDatabaseDateFormat());
 
     private Invocation requestBuilder;
 
@@ -46,7 +47,6 @@ public class PersonCreateScenarios extends Steps {
                                                       @Named("lastName") String lastName,
                                                       @Named("dateOfBirth") String dateOfBirth,
                                                       @Named("mediaType") String mediaType) {
-        Person somePerson = new PersonDAO().findById(3);
         Person person = new Person();
         person.setFirstName(firstName);
         person.setLastName(lastName);

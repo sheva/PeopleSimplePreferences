@@ -2,7 +2,8 @@ package com.sheva.data;
 
 import io.swagger.annotations.ApiModel;
 
-import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Color enumeration class.
@@ -21,8 +22,6 @@ public enum Color {
     violet;
 
     public static String printAllValues() {
-        StringBuilder all = new StringBuilder();
-        Arrays.asList(Color.values()).forEach((color) -> all.append(color).append(", "));
-        return all.toString();
+        return Stream.of(Color.values()).map(Color::name).collect(Collectors.joining(", "));
     }
 }

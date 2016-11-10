@@ -25,7 +25,7 @@ public class DatabaseTestHelper {
     private static final Logger logger = Logger.getLogger(DatabaseTestHelper.class.getName());
 
     private static void executeNativeQueriesFromFiles(Path... paths) throws Exception {
-        SessionFactory factory = Database.getInstance().getFactory();
+        SessionFactory factory = Database.INSTANCE.getFactory();
 
         try (Session session = factory.openSession()) {
             Transaction transaction = null;
@@ -62,7 +62,7 @@ public class DatabaseTestHelper {
     }
 
     public static List executeSqlQuery(String sqlQuery) throws HibernateException {
-        SessionFactory factory = Database.getInstance().getFactory();
+        SessionFactory factory = Database.INSTANCE.getFactory();
         Transaction transaction = null;
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
