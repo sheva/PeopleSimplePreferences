@@ -1,7 +1,6 @@
 package com.sheva.api.providers;
 
 import com.sheva.data.Food;
-import com.sheva.utils.ApplicationHelper;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
@@ -14,7 +13,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
+import static com.sheva.utils.ApplicationHelper.getTypeOfParameterByIndexForClass;
 
 /**
  * Writer and JSON compositor for Food.class collection.
@@ -25,11 +25,10 @@ import java.util.logging.Logger;
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class FoodCollectionMessageBodyWriter extends CollectionMessageBodyWriter<Food> implements MessageBodyWriter<ArrayList<Food>> {
 
-    private static final Logger logger = Logger.getLogger(FoodCollectionMessageBodyWriter.class.getName());
-
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
-        return List.class.isAssignableFrom(aClass) && Food.class == ApplicationHelper.getTypeOfParameterByIndexForClass(type, 0);
+        return List.class.isAssignableFrom(aClass) &&
+                Food.class == getTypeOfParameterByIndexForClass(type, 0);
     }
 
     @Override
@@ -46,10 +45,5 @@ public class FoodCollectionMessageBodyWriter extends CollectionMessageBodyWriter
     @Override
     protected Class getEntityClass() {
         return Food.class;
-    }
-
-    @Override
-    public Logger getLogger() {
-        return logger;
     }
 }

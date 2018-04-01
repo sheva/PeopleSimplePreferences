@@ -4,7 +4,6 @@ import com.sheva.api.exceptions.AlreadyExistsException;
 import com.sheva.data.Color;
 import com.sheva.data.Food;
 import com.sheva.data.Person;
-import com.sheva.db.Database;
 import com.sheva.db.PropertiesFileResolver;
 import com.sheva.services.PersonDAO;
 import org.jbehave.core.annotations.*;
@@ -20,10 +19,7 @@ import java.util.Set;
 
 import static com.sheva.db.DatabaseTestHelper.*;
 import static com.sheva.jbehave.stories.AppStories.getTarget;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 
 public class PersonCreateScenarios extends Steps {
@@ -77,21 +73,21 @@ public class PersonCreateScenarios extends Steps {
         assertTrue(response.getLocation().getPath().contains("people/" + personCreated.getId()));
     }
 
-    @Given("create person request with <firstName>, <lastName>, <dateOfBirth> with media type <mediaType>.")
-    public void givenPersonNewRequestWithParams(@Named("firstName") String firstName,
-                                                @Named("lastName") String lastName,
-                                                @Named("dateOfBirth") String dateOfBirth,
-                                                @Named("mediaType") String mediaType) {
-        Person person = new Person();
-        person.setFirstName(firstName);
-        person.setLastName(lastName);
-        person.setDateOfBirth(LocalDate.parse(dateOfBirth, dateFormatter));
-        Set<Color> colors = new HashSet<Color>() {{add(Color.blue); add(Color.red);}};
-        person.setColor(colors);
-        Set<Food> food = new HashSet<Food>() {{add(new Food("some"));}};
-        person.setFood(food);
-        requestBuilder = getTarget().path("people").request().accept(mediaType).buildPost(Entity.entity(person, mediaType));
-    }
+//    @Given("create person request with <firstName>, <lastName>, <dateOfBirth> with media type <mediaType>.")
+//    public void givenPersonNewRequestWithParams(@Named("firstName") String firstName,
+//                                                @Named("lastName") String lastName,
+//                                                @Named("dateOfBirth") String dateOfBirth,
+//                                                @Named("mediaType") String mediaType) {
+//        Person person = new Person();
+//        person.setFirstName(firstName);
+//        person.setLastName(lastName);
+//        person.setDateOfBirth(LocalDate.parse(dateOfBirth, dateFormatter));
+//        Set<Color> colors = new HashSet<Color>() {{add(Color.blue); add(Color.red);}};
+//        person.setColor(colors);
+//        Set<Food> food = new HashSet<Food>() {{add(new Food("some"));}};
+//        person.setFood(food);
+//        requestBuilder = getTarget().path("people").request().accept(mediaType).buildPost(Entity.entity(person, mediaType));
+//    }
 
     @When("person with <firstName>, <lastName>, <dateOfBirth> exists in database.")
     public void whenFoodRecordExistsAlreadyInDatabaseWithParams(@Named("firstName") String firstName,

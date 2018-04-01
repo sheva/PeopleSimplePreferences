@@ -30,10 +30,6 @@ public class InvalidRequestDataException extends WebApplicationException {
         this.exception = e.getException();
     }
 
-    public InvalidRequestDataException(String entityClass, String key, Object value) {
-        this(entityClass, key, value, null);
-    }
-
     public InvalidRequestDataException.InvalidRequestData getException(){
         return exception;
     }

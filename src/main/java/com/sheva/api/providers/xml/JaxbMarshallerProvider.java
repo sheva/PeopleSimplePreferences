@@ -14,27 +14,27 @@ import java.util.logging.Logger;
  * Created by Sheva on 10/4/2016.
  */
 public enum JaxbMarshallerProvider {
-
     INSTANCE;
 
+    private final Logger logger = Logger.getLogger(JaxbMarshallerProvider.class.getName());
     private final JAXBContext jaxbContext;
 
     JaxbMarshallerProvider() {
         try {
             jaxbContext = JAXBContext.newInstance(Food.class, Person.class);
         } catch (JAXBException jaxbException) {
-            Logger.getLogger(JaxbMarshallerProvider.class.getName()).log(Level.SEVERE, jaxbException.getMessage(), jaxbException);
+            logger.log(Level.SEVERE, jaxbException.getMessage(), jaxbException);
             throw new WebApplicationException(jaxbException.getMessage(), jaxbException);
         }
     }
 
-    public Marshaller getMarshaller() throws JAXBException {
+    public Marshaller createMarshaller() throws JAXBException {
         return jaxbContext.createMarshaller();
     }
 
-    public Unmarshaller getUnmarshaller() throws JAXBException {
+    public Unmarshaller createUnmarshaller() throws JAXBException {
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        unmarshaller.setEventHandler((ValidationEvent event) -> false);
+        unmarshaller.setEventHandler(e -> false);
         return unmarshaller;
     }
 }

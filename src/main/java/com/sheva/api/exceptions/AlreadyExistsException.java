@@ -21,10 +21,6 @@ public class AlreadyExistsException extends WebApplicationException {
         this.exception = new AlreadyExistsException.AlreadyExists(getMessage(), clazz.getSimpleName());
     }
 
-    public AlreadyExistsException(Class clazz) {
-        this(clazz, null);
-    }
-
     public AlreadyExistsException.AlreadyExists getException() {
         return exception;
     }

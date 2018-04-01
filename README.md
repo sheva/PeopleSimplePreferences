@@ -1,7 +1,7 @@
 Simple People Preferences
 =========================
 
-Simple RESTful API to manage personal info (name, age) and preferences (food, color).
+RESTful API to manage personal info (name, age) and personal preferences (food, color).
 
 Built using:
 
@@ -21,11 +21,11 @@ Built using:
 
 ## Details
 
-I've implemented date of birth instead of age, because age is dynamic value. But I've also added "age" field - it's read-only & auto-calculated from date of birth.
+Implemented date of birth instead of age, because age is dynamic value. But also "age" field added - it's read-only & auto-calculated from date of birth.
 
-I've implemented multiple preferences for color & food. Color preferences are sub-set of pre-defined colors so I've used `Enum`. Food preferences are user-generated so I've used a separate DB table & relation one-to-many.
+Implemented multiple preferences for color & food. Color preferences are sub-set of pre-defined colors so I used `enum`. Food preferences are user-generated so I've used a separate DB table & relation one-to-many.
 
-I've added constraint for unique first name + last name + date of birth. You can't create two persons with same fields.
+Added constraint for unique first name + last name + date of birth. You can't create two persons with same fields.
 
 ## Try it!
 
@@ -114,7 +114,7 @@ I've not implemented creation and deletion of food record because it's a part of
 
 ## Dev extras
 
-I've created a special test page, served by dev server, to test the API in the browser:
+Special test page created, served by dev server, to test the API in the browser:
 
     http://localhost:8080/test/web/index.html
 
@@ -122,11 +122,11 @@ First you need to choose HTTP method, then - fill the form & send.
 
 ## Tests
 
-I use JUnit for unit tests and JBehave for application-level tests. Build & test:
+JUnit for unit tests and JBehave for application-level tests used. Run tests command:
 
     mvn clean test integration-test
     
-View the results of JBehave tests goto "target/jbehave/view/reports.html".
+To view the results of JBehave tests go to "target/jbehave/view/reports.html".
 
 ## Docs
 

@@ -8,6 +8,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+import static javax.ws.rs.core.Response.status;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+
 /**
  * Not Found response if entity not found exception.
  *
@@ -19,6 +22,6 @@ public class EntityNotFoundExceptionWebMapper implements ExceptionMapper<EntityN
 
     @Override
     public Response toResponse(EntityNotFoundException e) {
-        return Response.status(Response.Status.NOT_FOUND).entity(e.getException()).build();
+        return status(NOT_FOUND).entity(e.getException()).build();
     }
 }

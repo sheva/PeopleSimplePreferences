@@ -24,8 +24,13 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.util.logging.Level.*;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.APPLICATION_XML;
+import static javax.ws.rs.core.MediaType.APPLICATION_XML_TYPE;
 
 /**
  * Provides custom writing Person beans to JSON in order to avoid recursion caused by Many-To-Many relationship.
@@ -33,20 +38,21 @@ import java.util.logging.Logger;
  * Created by Sheva on 10/3/2016.
  */
 @Provider
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Produces({APPLICATION_JSON, APPLICATION_XML})
+@Consumes({APPLICATION_JSON, APPLICATION_XML})
 public class PersonMessageBodyHandler implements MessageBodyWriter<Person>, MessageBodyReader<Person> {
 
     private static final Logger logger = Logger.getLogger(PersonMessageBodyHandler.class.getName());
+    private static final Type clazz = Person.class;
 
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
-        return type == Person.class;
+        return type == clazz;
     }
 
     @Override
     public boolean isReadable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
-        return type == Person.class;
+        return type == clazz;
     }
 
     @Override
@@ -56,79 +62,79 @@ public class PersonMessageBodyHandler implements MessageBodyWriter<Person>, Mess
 
     @Override
     public Person readFrom(Class<Person> aClass, Type type, Annotation[] annotations, MediaType mediaType,
-                           MultivaluedMap<String, String> multivaluedMap, InputStream inputStream) throws IOException, WebApplicationException {
-        if (mediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE)) {
-            return readJson(inputStream);
-        } else if (mediaType.isCompatible(MediaType.APPLICATION_XML_TYPE)) {
-            return readXml(inputStream);
+                           MultivaluedMap<String, String> multivaluedMap, InputStream input)
+            throws IOException, WebApplicationException {
+        if (mediaType.isCompatible(APPLICATION_JSON_TYPE)) {
+            return readJson(input);
+        } else if (mediaType.isCompatible(APPLICATION_XML_TYPE)) {
+            return readXml(input);
         } else {
-            logger.log(Level.WARNING, "Request with not supported media type was called: " + mediaType);
-            throw new WebApplicationException("Unsupported media type " + mediaType.toString());
+            logger.log(WARNING, String.format("Media type '%s' is not supported.", mediaType));
+            throw new WebApplicationException(String.format("Unsupported media type '%s'.", mediaType));
         }
     }
 
-    private Person readJson(InputStream inputStream) throws IOException {
-        try (InputStreamReader streamReader = new InputStreamReader(inputStream)) {
-            Gson gson = new GsonBuilder().create();
-            Person person = gson.fromJson(streamReader, Person.class);
+    private Person readJson(InputStream input) throws IOException {
+        try (InputStreamReader reader = new InputStreamReader(input)) {
+            final Gson gson = new GsonBuilder().create();
+            final Person person = gson.fromJson(reader, clazz);
             resetFoodElements(person);
-            logger.log(Level.FINEST, String.format("Deserialized from JSON Person.class object <person:id=%d> : %s", person.getId(), person));
+            logger.log(FINEST, String.format("Deserialization from JSON object <person:id=%d>: %s failed.", person.getId(), person));
             return person;
         }
     }
 
-
-    private Person readXml(InputStream inputStream) throws WebApplicationException {
+    private Person readXml(InputStream stream) throws WebApplicationException {
         try {
-            Person person = (Person) JaxbMarshallerProvider.INSTANCE.getUnmarshaller().unmarshal(inputStream);
+            final Person person = (Person) JaxbMarshallerProvider.INSTANCE.createUnmarshaller().unmarshal(stream);
             resetFoodElements(person);
-            logger.log(Level.FINEST, String.format("Deserialized from XML Person.class object <person:id=%d> : %s", person.getId(), person));
+            logger.log(FINEST, String.format("Deserialization from XML object <person:id=%d>: %s failed.", person.getId(), person));
             return person;
-        } catch (JAXBException jaxbException) {
-            Throwable cause = jaxbException.getCause();
+        } catch (JAXBException e) {
+            Throwable cause = e.getCause();
             if (cause.getCause() instanceof InvalidRequestDataException) {
-                logger.log(Level.WARNING, "Invalid request data found in request ");
+                logger.log(WARNING, "Invalid request data found in request.");
                 throw new InvalidRequestDataException((InvalidRequestDataException) cause.getCause());
             }
-
-            logger.log(Level.WARNING, "Error unmarshalling object. " + jaxbException.getMessage(), jaxbException);
-            throw new WebApplicationException("Deserialized from XML failed ");
+            logger.log(WARNING, String.format("Error unmarshalling object. Reason: '%s'.", e.getMessage()), e);
+            throw new WebApplicationException("Deserialization from XML failed.");
         }
     }
 
     @Override
     public void writeTo(Person person, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType,
-                        MultivaluedMap<String, Object> multivaluedMap, OutputStream outputStream) throws IOException, WebApplicationException {
+                        MultivaluedMap<String, Object> multivaluedMap, OutputStream output)
+            throws IOException, WebApplicationException {
         if (mediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE)) {
-            writeJson(person, outputStream);
+            writeJson(person, output);
         } else if (mediaType.isCompatible(MediaType.APPLICATION_XML_TYPE)) {
-            writeXml(person, outputStream);
+            writeXml(person, output);
         } else {
-            logger.log(Level.WARNING, "Request with not supported media type was called: " + mediaType);
-            throw new WebApplicationException("Unsupported media type " + mediaType.toString());
+            logger.log(WARNING, String.format("Media type '%s' is not supported.", mediaType));
+            throw new WebApplicationException(String.format("Unsupported media type '%s'.", mediaType));
         }
     }
 
     private void writeJson(Person person, OutputStream outputStream) throws IOException {
-        Gson gson = new GsonBuilder().create();
-        String json = gson.toJson(person);
-        outputStream.write(json.getBytes());
-        logger.log(Level.FINEST, String.format("Serialized object for <person:id=%d> : %s", person.getId(), json));
+        final Gson gson = new GsonBuilder().create();
+        final String personInJson = gson.toJson(person);
+        outputStream.write(personInJson.getBytes());
+        logger.log(FINEST, String.format("Serialized object for <person:id=%d> : %s.", person.getId(), personInJson));
     }
 
     private void writeXml(Person person, OutputStream outputStream) {
         try {
-            JaxbMarshallerProvider.INSTANCE.getMarshaller().marshal(person, outputStream);
-            logger.log(Level.FINEST, String.format("Serialized object for <person:id=%d> : %s", person.getId(), person));
+            JaxbMarshallerProvider.INSTANCE.createMarshaller().marshal(person, outputStream);
+            logger.log(FINEST, String.format("Serialized object for <person:id=%d> : %s.", person.getId(), person));
         } catch (JAXBException jaxbException) {
-            logger.log(Level.SEVERE, String.format("Error constructing object for <person:id=%d> : %s", person.getId(), jaxbException));
-            throw new WebApplicationException("Error serializing a Person.class to the output stream", jaxbException);
+            logger.log(SEVERE, String.format("Error constructing object for <person:id=%d>: %s.", person.getId(), jaxbException));
+            throw new WebApplicationException("Error serializing to the output stream.", jaxbException);
         }
     }
 
     private void resetFoodElements(Person person) {
-        Set<Food> newFavoriteFood = new HashSet<>();
-        person.getFood().forEach((food) -> {newFavoriteFood.add(new Food(food.getName()));});
+        final Set<Food> newFavoriteFood = new HashSet<>();
+        person.getFood().forEach(f -> newFavoriteFood.add(new Food(f.getName())));
         person.setFood(newFavoriteFood);
     }
 }

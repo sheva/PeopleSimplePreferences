@@ -28,8 +28,8 @@ public class Food implements Serializable {
 
     @Id
     @Column(name = "foodId")
-    @GenericGenerator(name="idGenerator" , strategy="increment")
-    @GeneratedValue(generator="idGenerator")
+    @GenericGenerator(name = "idGenerator" , strategy = "increment")
+    @GeneratedValue(generator = "idGenerator")
     @ApiModelProperty(required = true, value = "food entity identifier")
     @XmlElement(required = true)
     private Integer id = 0;

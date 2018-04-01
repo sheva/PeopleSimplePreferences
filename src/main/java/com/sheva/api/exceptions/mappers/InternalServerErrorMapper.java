@@ -1,11 +1,13 @@
 package com.sheva.api.exceptions.mappers;
 
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+
+import static javax.ws.rs.core.Response.status;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 /**
  * Base wrapper class for Internal Server Errors.
@@ -17,6 +19,6 @@ import javax.ws.rs.ext.Provider;
 public class InternalServerErrorMapper implements ExceptionMapper<Exception> {
 
     public Response toResponse(Exception ex) {
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+         return status(INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
     }
 }

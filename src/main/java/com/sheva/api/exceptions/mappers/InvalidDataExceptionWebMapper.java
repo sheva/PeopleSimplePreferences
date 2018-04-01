@@ -8,6 +8,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+import static javax.ws.rs.core.Response.status;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+
 /**
  * Process bad request data exceptions.
  *
@@ -19,6 +22,6 @@ public class InvalidDataExceptionWebMapper implements ExceptionMapper<InvalidReq
 
     @Override
     public Response toResponse(InvalidRequestDataException e) {
-        return Response.status(Response.Status.BAD_REQUEST).entity(e.getException()).build();
+        return status(BAD_REQUEST).entity(e.getException()).build();
     }
 }

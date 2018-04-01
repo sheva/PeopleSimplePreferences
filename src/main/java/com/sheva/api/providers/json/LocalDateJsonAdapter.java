@@ -9,8 +9,9 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.util.logging.Level.WARNING;
 
 /**
  * Customized serialization processes of LocalDate.class by gson builder.
@@ -19,30 +20,29 @@ import java.util.logging.Logger;
  */
 public class LocalDateJsonAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
 
-    private static final Logger logger = Logger.getLogger(JaxbMarshallerProvider.class.getName());
-
+    private static final Logger LOGGER = Logger.getLogger(JaxbMarshallerProvider.class.getName());
     private static final String DATE_FORMAT = PropertiesFileResolver.INSTANCE.getDatabaseDateFormat();
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
     @Override
     public LocalDate deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         if (!(jsonElement instanceof JsonPrimitive)) {
-            logger.log(Level.WARNING, "The date should be a string value : " + jsonElement);
-            throw new JsonParseException("The date should be a string value : " + jsonElement);
+            final String message = String.format("The date should be a string value: %s.", jsonElement);
+            LOGGER.log(WARNING, message);
+            throw new JsonParseException(message);
         }
 
         String dateStr = jsonElement.getAsString();
-
         try {
-            return LocalDate.parse(dateStr, DateTimeFormatter.ofPattern(DATE_FORMAT));
+            return LocalDate.parse(dateStr, FORMATTER);
         } catch (DateTimeParseException e) {
-            logger.log(Level.WARNING, "Invalid color property value found in request " + dateStr);
+            LOGGER.log(WARNING, String.format("Invalid color property value found in request %s.", dateStr));
             throw new InvalidRequestDataException(null, "date", dateStr, e);
         }
     }
 
     @Override
     public JsonElement serialize(LocalDate localDate, Type type, JsonSerializationContext jsonSerializationContext) {
-        String dateFormatAsString = localDate.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-        return new JsonPrimitive(dateFormatAsString);
+        return new JsonPrimitive(localDate.format(FORMATTER));
     }
 }

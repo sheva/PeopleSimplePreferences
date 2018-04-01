@@ -8,6 +8,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+import static javax.ws.rs.core.Response.status;
+import static javax.ws.rs.core.Response.Status.CONFLICT;
+
 /**
  * Entity already exists exception response mapper.
  *
@@ -19,7 +22,7 @@ public class AlreadyExistsExceptionMapper implements ExceptionMapper<AlreadyExis
 
     @Override
     public Response toResponse(AlreadyExistsException e) {
-        return Response.status(Response.Status.CONFLICT).entity(e.getException()).build();
+        return status(CONFLICT).entity(e.getException()).build();
     }
 }
 
