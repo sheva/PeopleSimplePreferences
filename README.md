@@ -1,4 +1,4 @@
-Simple People Preferences
+People Simple Preferences
 =========================
 
 RESTful API to manage personal info (name, age) and personal preferences (food, color).
