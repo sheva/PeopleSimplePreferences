@@ -37,7 +37,7 @@ public class TestFoodService {
     }
 
     @Test
-    public void testListAllFood() throws Exception {
+    public void testListAllFood() {
         List<Food> food = dao.findAll();
         assertEquals(7, food.size());
         food.sort((f1, f2) -> (f1.getName().compareToIgnoreCase(f2.getName())));
@@ -45,13 +45,13 @@ public class TestFoodService {
     }
 
     @Test
-    public void testFindById() throws Exception {
+    public void testFindById() {
         Food food = dao.findById(3);
         assertEquals("bass", food.getName());
     }
 
     @Test
-    public void testGetByName() throws Exception {
+    public void testGetByName() {
         List<Food> food = dao.findByName("bana");
         food.sort((f1, f2) -> (f1.getId() - f2.getId()));
         assertEquals(1, food.size());
@@ -60,7 +60,7 @@ public class TestFoodService {
     }
 
     @Test
-    public void testUpdateById() throws Exception {
+    public void testUpdateById() {
         Food food = dao.findById(3);
         String oldName = food.getName();
         Person person = new Person();
@@ -73,7 +73,7 @@ public class TestFoodService {
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    public void testUpdate() {
         Food food = dao.findById(3);
         String oldName = food.getName();
         food.setName("bass fish meat");
@@ -84,7 +84,7 @@ public class TestFoodService {
     }
 
     @Test
-    public void testUpdateByIdWhenNotFound() throws Exception {
+    public void testUpdateByIdWhenNotFound() {
         try {
             dao.updateById(43, "bass fish meat");
             fail("EntityNotFoundException not thrown");
@@ -95,7 +95,7 @@ public class TestFoodService {
     }
 
     @Test
-    public void testFindByName() throws Exception {
+    public void testFindByName() {
         List<Food> food = dao.findByName("c");
         assertEquals(3, food.size());
         food.sort((f1, f2) -> (f1.getName().compareToIgnoreCase(f2.getName())));

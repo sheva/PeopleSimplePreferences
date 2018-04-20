@@ -23,24 +23,9 @@ import java.util.logging.Logger;
  *
  * Created by Sheva on 9/29/2016.
  */
-public class PersonDAO implements AbstractDAO<Person> {
+public class PersonDAO extends AbstractDAO<Person> {
 
     private static final Logger logger = Logger.getLogger(PersonDAO.class.getName());
-
-    @Override
-    public SessionFactory getFactory() {
-        return Database.INSTANCE.getFactory();
-    }
-
-    @Override
-    public Class getEntityClass() {
-        return Person.class;
-    }
-
-    @Override
-    public Logger getLogger() {
-        return logger;
-    }
 
     @Override
     public Person create(Person person) throws HibernateException {

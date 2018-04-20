@@ -41,7 +41,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testFindAll() throws Exception {
+    public void testFindAll() {
         List<Person> people = dao.findAll();
         assertNotNull(people);
         people.sort((h1, h2) -> (h1.getId() - h2.getId()));
@@ -53,7 +53,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testFindById() throws Exception {
+    public void testFindById() {
         Person person = dao.findById(1);
         assertEquals("Vasya", person.getFirstName());
         assertEquals("Ivanov", person.getLastName());
@@ -67,7 +67,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testFindByName() throws Exception {
+    public void testFindByName() {
         List<Person> people = dao.searchByParams(buildParams(null, "Ivanov"));
         assertEquals(2, people.size());
         people.sort((h1, h2) -> (h1.getId() - h2.getId()));
@@ -97,7 +97,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testNotFound() throws Exception {
+    public void testNotFound() {
         try {
             dao.findById(56);
             fail();
@@ -107,7 +107,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testFindByParamsWhenEmptyOrNotSet() throws Exception {
+    public void testFindByParamsWhenEmptyOrNotSet() {
         assertEquals(3, dao.searchByParams(buildParams(null, "")).size());
         assertEquals(3, dao.searchByParams(buildParams("", null)).size());
         assertEquals(3, dao.searchByParams(buildParams("", "")).size());
@@ -116,7 +116,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    public void testUpdate() {
         Person person = dao.findById(1);
         String oldName = person.getFirstName();
         String oldLastName = person.getLastName();
@@ -155,7 +155,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testUpdateWhenExist() throws Exception {
+    public void testUpdateWhenExist() {
         Person person = dao.findById(1);
         person.setFirstName("Vasya");
         person.setLastName("Petrov");
@@ -176,7 +176,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testUpdateByIdBirthday() throws Exception {
+    public void testUpdateByIdBirthday() {
         Person person = dao.findById(1);
         String oldFirstName = person.getFirstName();
         String oldLastName = person.getLastName();
@@ -200,7 +200,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testUpdateByNames() throws Exception {
+    public void testUpdateByNames() {
         Person person = dao.findById(1);
         String oldFirstName = person.getFirstName();
         String oldLastName = person.getLastName();
@@ -227,7 +227,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testUpdateByFavoriteColors() throws Exception {
+    public void testUpdateByFavoriteColors() {
         Person person = dao.findById(1);
         String oldFirstName = person.getFirstName();
         String oldLastName = person.getLastName();
@@ -251,7 +251,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testUpdateByFavoriteFood() throws Exception {
+    public void testUpdateByFavoriteFood() {
         Person person = dao.findById(1);
         String oldFirstName = person.getFirstName();
         String oldLastName = person.getLastName();
@@ -276,7 +276,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testUpdateByIdWhenNotFound() throws Exception {
+    public void testUpdateByIdWhenNotFound() {
         try {
             Person person = new Person();
             person.setFirstName("test");
@@ -291,7 +291,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testDeleteById() throws Exception {
+    public void testDeleteById() {
         Person person = dao.findById(1);
         dao.deleteById(1);
         assertEquals("Vasya", person.getFirstName());
@@ -312,7 +312,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testDelete() throws Exception {
+    public void testDelete() {
         Person person = dao.findById(1);
         assertEquals("Vasya", person.getFirstName());
         dao.delete(person);
@@ -333,7 +333,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testCreateNewPerson() throws Exception {
+    public void testCreateNewPerson() {
         Set<Food> food = new HashSet<>();
         Food food1 = new Food();
         food1.setName("name");
@@ -355,7 +355,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testCreateNewPersonWhenAlreadyExists() throws Exception {
+    public void testCreateNewPersonWhenAlreadyExists() {
         try {
             Set<Food> food = new HashSet<>();
             Food food1 = new Food();
@@ -369,7 +369,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testCreateNewPersonWhenFoodAlreadyExists() throws Exception {
+    public void testCreateNewPersonWhenFoodAlreadyExists() {
         Person person = dao.findById(1);
         person.setFirstName("test");
         Food food = new FoodDAO().findById(1);
@@ -380,7 +380,7 @@ public class TestPersonService {
     }
 
     @Test
-    public void testCreate() throws Exception {
+    public void testCreate() {
         Person person = new Person();
         person.setFirstName("Lena");
         person.setLastName("Sheva");

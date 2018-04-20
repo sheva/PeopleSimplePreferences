@@ -18,24 +18,9 @@ import java.util.logging.Logger;
  *
  * Created by Sheva on 9/29/2016.
  */
-public class FoodDAO implements AbstractDAO<Food> {
+public class FoodDAO extends AbstractDAO<Food> {
 
     private static final Logger logger = Logger.getLogger(FoodDAO.class.getName());
-
-    @Override
-    public SessionFactory getFactory() {
-        return Database.INSTANCE.getFactory();
-    }
-
-    @Override
-    public Class getEntityClass() {
-        return Food.class;
-    }
-
-    @Override
-    public Logger getLogger() {
-        return logger;
-    }
 
     public Food updateById(final int id, final String name) throws WebApplicationException {
         return executeQuery((Session session) -> {

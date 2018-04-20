@@ -1,9 +1,10 @@
 package com.sheva.services;
 
-import com.sheva.api.exceptions.InvalidRequestDataException;
-import com.sheva.data.Person;
 import com.sheva.api.exceptions.AlreadyExistsException;
 import com.sheva.api.exceptions.EntityNotFoundException;
+import com.sheva.api.exceptions.InvalidRequestDataException;
+import com.sheva.data.Person;
+import com.sheva.db.Database;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -21,30 +22,38 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.sheva.utils.ApplicationHelper.getEntityClass;
+
 /**
  * Base DAO class for manipulating with persistent entities.
  *
  * Created by Sheva on 10/2/2016.
  */
-interface AbstractDAO<E> {
+abstract class AbstractDAO<E> {
 
-    SessionFactory getFactory();
-    E create(E entity) throws HibernateException;
-    E update(E entity) throws HibernateException;
-    void delete(E entity) throws HibernateException;
+    private static final Logger logger = Logger.getLogger(FoodDAO.class.getName());
 
-    Class getEntityClass();
-    Logger getLogger();
+    private final Class entityClass;
+    private final SessionFactory sessionFactory;
+
+    AbstractDAO() {
+        entityClass = getEntityClass(this);
+        sessionFactory = Database.INSTANCE.getFactory();
+    }
+
+    abstract E create(E entity) throws HibernateException;
+    abstract E update(E entity) throws HibernateException;
+    abstract void delete(E entity) throws HibernateException;
 
     interface ExecutableQuery<E> {
         E execute(Session session) throws HibernateException;
     }
 
-    default <T> T executeQuery(ExecutableQuery<T> query) throws HibernateException {
+    <T> T executeQuery(ExecutableQuery<T> query) throws HibernateException {
 
         Transaction transaction = null;
 
-        try (Session session = getFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             T result = query.execute(session);
             transaction.commit();
@@ -55,35 +64,35 @@ interface AbstractDAO<E> {
             }
             if (e.getCause() instanceof ConstraintViolationException) {
                 ConstraintViolationException constraint = (ConstraintViolationException) e.getCause();
-                getLogger().log(Level.WARNING, e.toString(), e);
+                logger.log(Level.WARNING, e.toString(), e);
 
                 if  (constraint.getConstraintName().contains("UNIQUE")) {
-                    throw new AlreadyExistsException(getEntityClass(), e.getCause());
+                    throw new AlreadyExistsException(entityClass, e.getCause());
                 } else if (constraint.getConstraintName().contains("NOT NULL")) {
                     SQLException sqlException = ((ConstraintViolationException) e.getCause()).getSQLException();
-                    throw new InvalidRequestDataException(getEntityClass().getSimpleName(), null, null, sqlException);
+                    throw new InvalidRequestDataException(entityClass.getSimpleName(), null, null, sqlException);
                 }
 
                 throw e;
             }
 
-            getLogger().log(Level.SEVERE, e.toString(), e);
+            logger.log(Level.SEVERE, e.toString(), e);
             throw e;
         }
     }
 
     @SuppressWarnings(value = "unchecked")
-    default List<E> findAll() throws WebApplicationException {
-        return executeQuery((Session session) -> session.createQuery("from " + getEntityClass().getSimpleName()).list());
+    List<E> findAll() throws WebApplicationException {
+        return executeQuery((Session session) -> session.createQuery("from " + entityClass.getSimpleName()).list());
     }
 
     @SuppressWarnings(value = "unchecked")
-    default E findById(final int id) throws WebApplicationException {
-        String query = String.format("from %s e where e.id=:id", getEntityClass().getSimpleName());
+    E findById(final int id) throws WebApplicationException {
+        String query = String.format("from %s e where e.id=:id", entityClass.getSimpleName());
         E entity = executeQuery((Session session) -> (E) session.createQuery(query).setParameter("id", id).uniqueResult());
 
         if (entity == null) {
-            getLogger().log(Level.WARNING, String.format("Entity %s was not found by id:%d.", getEntityClass(), id));
+            logger.log(Level.WARNING, String.format("Entity %s was not found by id:%d.", entityClass, id));
             throw new EntityNotFoundException(Person.class, "id", id);
         }
 
@@ -91,10 +100,10 @@ interface AbstractDAO<E> {
     }
 
     @SuppressWarnings("unchecked")
-    default List<E> searchByParams(Map<String, Object> params) throws HibernateException {
+    List<E> searchByParams(Map<String, Object> params) throws HibernateException {
         return executeQuery((Session session) -> {
             StringBuilder query = new StringBuilder();
-            String entityClassName = getEntityClass().getSimpleName();
+            String entityClassName = entityClass.getSimpleName();
             query.append("from ").append(entityClassName);
 
             final AtomicInteger index = new AtomicInteger(0);
@@ -132,7 +141,7 @@ interface AbstractDAO<E> {
                 hibQuery.setParameter(property, (value instanceof String) ? "%" + value + "%" : value);
             });
 
-            getLogger().log(Level.FINEST, String.format("Query for %s constructed %s", getEntityClass(), hibQuery.getQueryString()));
+            logger.log(Level.FINEST, String.format("Query for %s constructed %s", entityClass, hibQuery.getQueryString()));
 
             return hibQuery.list();
         });
