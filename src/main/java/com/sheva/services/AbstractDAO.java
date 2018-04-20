@@ -3,7 +3,6 @@ package com.sheva.services;
 import com.sheva.api.exceptions.AlreadyExistsException;
 import com.sheva.api.exceptions.EntityNotFoundException;
 import com.sheva.api.exceptions.InvalidRequestDataException;
-import com.sheva.data.Person;
 import com.sheva.db.Database;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.HibernateException;
@@ -29,7 +28,7 @@ import static com.sheva.utils.ApplicationHelper.getEntityClass;
  *
  * Created by Sheva on 10/2/2016.
  */
-abstract class AbstractDAO<E> {
+public abstract class AbstractDAO<E> {
 
     private static final Logger logger = Logger.getLogger(FoodDAO.class.getName());
 
@@ -82,25 +81,25 @@ abstract class AbstractDAO<E> {
     }
 
     @SuppressWarnings(value = "unchecked")
-    List<E> findAll() throws WebApplicationException {
+    public List<E> findAll() throws WebApplicationException {
         return executeQuery((Session session) -> session.createQuery("from " + entityClass.getSimpleName()).list());
     }
 
     @SuppressWarnings(value = "unchecked")
-    E findById(final int id) throws WebApplicationException {
+    public E findById(final int id) throws WebApplicationException {
         String query = String.format("from %s e where e.id=:id", entityClass.getSimpleName());
         E entity = executeQuery((Session session) -> (E) session.createQuery(query).setParameter("id", id).uniqueResult());
 
         if (entity == null) {
             logger.log(Level.WARNING, String.format("Entity %s was not found by id:%d.", entityClass, id));
-            throw new EntityNotFoundException(Person.class, "id", id);
+            throw new EntityNotFoundException(entityClass, "id", id);
         }
 
         return entity;
     }
 
     @SuppressWarnings("unchecked")
-    List<E> searchByParams(Map<String, Object> params) throws HibernateException {
+    public List<E> searchByParams(Map<String, Object> params) throws HibernateException {
         return executeQuery((Session session) -> {
             StringBuilder query = new StringBuilder();
             String entityClassName = entityClass.getSimpleName();

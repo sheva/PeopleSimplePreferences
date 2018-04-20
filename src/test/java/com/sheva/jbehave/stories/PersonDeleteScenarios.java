@@ -39,7 +39,7 @@ public class PersonDeleteScenarios extends Steps {
     }
 
     @When("person record with <id> exists in database.")
-    public void whenPersonRecordExists(@Named("id") int id) throws Exception {
+    public void whenPersonRecordExists(@Named("id") int id) {
         assertNotNull(findPersonById(id));
     }
 
@@ -56,7 +56,7 @@ public class PersonDeleteScenarios extends Steps {
     }
 
     @When("person record does not existing entity with id=<id> in database.")
-    public void whenPersonRecordNotExists(@Named("id") int id) throws Exception {
+    public void whenPersonRecordNotExists(@Named("id") int id) {
         assertNull(findPersonById(id));
     }
 

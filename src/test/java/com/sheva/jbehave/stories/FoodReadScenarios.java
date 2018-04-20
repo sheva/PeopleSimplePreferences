@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.sheva.jbehave.stories.AppStories.getTarget;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * 'food' resource READ scenarios.
@@ -41,7 +41,7 @@ public class FoodReadScenarios extends Steps {
     }
 
     @When("there are $amount food records in the database.")
-    public void whenThereIsAmountOfFood(@Named("amount") int amount) throws Exception {
+    public void whenThereIsAmountOfFood(@Named("amount") int amount) {
         List people = DatabaseTestHelper.executeSqlQuery("select * from FOOD");
         assertEquals(amount, people.size());
     }
@@ -66,7 +66,7 @@ public class FoodReadScenarios extends Steps {
 
     @When("there are <amount> food records in the database with name=<name>.")
     public void whenAmountValidRecordsInDb(@Named("name") String name,
-                                           @Named("amount") int amount) throws Exception {
+                                           @Named("amount") int amount) {
         HashMap<String, Object> params = new HashMap<String, Object>() {{
             if (!name.equalsIgnoreCase("null")) put("name", name);
         }};

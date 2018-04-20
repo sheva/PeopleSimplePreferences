@@ -1,11 +1,9 @@
 package com.sheva.services;
 
-import com.sheva.data.Food;
-import com.sheva.db.Database;
 import com.sheva.api.exceptions.EntityNotFoundException;
+import com.sheva.data.Food;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import javax.ws.rs.WebApplicationException;
 import java.util.HashMap;

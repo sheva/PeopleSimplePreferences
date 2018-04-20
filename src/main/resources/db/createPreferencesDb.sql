@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS PERSON_COLOR_PREFERENCES(
     personId INT NOT NULL,
     color CHAR(20) NOT NULL,
     PRIMARY KEY (personId, color),
-    CONSTRAINT COLOR_RANGE CHECK (color IN ("red", "orange", "yellow", "green", "blue", "indigo", "violet"))
+    CONSTRAINT COLOR_RANGE CHECK (color IN ("RED", "ORANGE", "YELLOW", "GREEN", "BLUE", "INDIGO", "VIOLET"))
 );
 
 CREATE TABLE IF NOT EXISTS PERSON_FOOD_PREFERENCES(

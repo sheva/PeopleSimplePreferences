@@ -13,13 +13,13 @@ import java.util.stream.Stream;
 @ApiModel
 public enum Color {
 
-    red,
-    orange,
-    yellow,
-    green,
-    blue,
-    indigo,
-    violet;
+    RED,
+    ORANGE,
+    YELLOW,
+    GREEN,
+    BLUE,
+    INDIGO,
+    VIOLET;
 
     public static String printAllValues() {
         return Stream.of(Color.values()).map(Color::name).collect(Collectors.joining(", "));

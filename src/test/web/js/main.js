@@ -56,7 +56,6 @@ function renderResponse(response, status, xhr) {
     $('#responseStatusText').text(status);
     $('#requestContentTypeHeader').text(this.contentType);
     $('#contentTypeHeader').text(xhr.getResponseHeader('Content-Type'));
-    $('#responseBodyText').text("");
     if (xhr.status === 201) {
         $('#responseBodyText').text(xhr.getResponseHeader('Location'));
     } else {
@@ -187,7 +186,7 @@ function fieldsToJSON() {
 
     if (colors) {
         colors.split(',').forEach(function(x) {
-            parsedColors.push(x.trim());
+            parsedColors.push(x.trim().toUpperCase());
         });
     }
 
@@ -224,7 +223,7 @@ function fieldsToXML() {
 
     if (colors) {
         colors.split(',').forEach(function(x) {
-            parsedColors += '<color>' + x.trim() + '</color>';
+            parsedColors += '<color>' + x.trim().toUpperCase() + '</color>';
         });
     }
 
@@ -237,7 +236,7 @@ function fieldsToXML() {
         });
     }
 
-    var result = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
         '<person>' +
             '<id>' + id + '</id>' +
             '<firstName>' + $('#firstName').val() + '</firstName>' +
@@ -246,7 +245,6 @@ function fieldsToXML() {
             '<favoriteColor>' + parsedColors + '</favoriteColor>' +
             '<favoriteFood>' + parsedFood + '</favoriteFood>' +
         '</person>';
-    return result;
 }
 
 function prepareData() {

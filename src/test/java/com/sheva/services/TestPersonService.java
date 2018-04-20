@@ -6,19 +6,23 @@ import com.sheva.data.Person;
 import com.sheva.db.DatabaseTestHelper;
 import com.sheva.api.exceptions.AlreadyExistsException;
 import com.sheva.api.exceptions.EntityNotFoundException;
-import junit.framework.Assert;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 
-import static junit.framework.Assert.*;
 import static com.sheva.db.DatabaseTestHelper.deleteAllData;
 import static com.sheva.db.DatabaseTestHelper.loadTestData;
+import static org.junit.Assert.*;
 
 
 /**
@@ -49,7 +53,7 @@ public class TestPersonService {
         assertEquals("Vasya", people.get(0).getFirstName());
         assertEquals("Ivanov", people.get(1).getLastName());
         assertEquals("1957-02-12", people.get(2).getDateOfBirth().toString());
-        assertEquals("59", people.get(2).getAge().toString());
+        checkAge(people.get(2));
     }
 
     @Test
@@ -102,7 +106,7 @@ public class TestPersonService {
             dao.findById(56);
             fail();
         } catch (EntityNotFoundException e) {
-            assertTrue(e.getException() instanceof EntityNotFoundException.EntityNotFound);
+            assertEquals(e.getException().getClass(), EntityNotFoundException.EntityNotFound.class);
         }
     }
 
@@ -128,8 +132,8 @@ public class TestPersonService {
         person.setLastName("Sheva");
         person.setDateOfBirth(LocalDate.of(1985, 12 ,18));
         person.setColor(new HashSet<Color>(){{
-            add(Color.blue);
-            add(Color.orange);
+            add(Color.BLUE);
+            add(Color.ORANGE);
         }});
         person.setFood(new HashSet<Food>(){
             {
@@ -148,8 +152,8 @@ public class TestPersonService {
         assertNotSame(birthday, person.getDateOfBirth());
         assertEquals(LocalDate.of(1985, 12 ,18), person.getDateOfBirth());
         assertNotSame(oldColors, person.getColor());
-        assertTrue(person.getColor().contains(Color.blue));
-        assertTrue(person.getColor().contains(Color.orange));
+        assertTrue(person.getColor().contains(Color.BLUE));
+        assertTrue(person.getColor().contains(Color.ORANGE));
         assertNotSame(oldFood, person.getFood());
         assertEquals(1, new FoodDAO().findByName("test").size());
     }
@@ -160,7 +164,7 @@ public class TestPersonService {
         person.setFirstName("Vasya");
         person.setLastName("Petrov");
         person.setDateOfBirth(LocalDate.of(1957, 02 ,12));
-        person.setColor(new HashSet<Color>(){{add(Color.blue); add(Color.orange);}});
+        person.setColor(new HashSet<Color>(){{add(Color.BLUE); add(Color.ORANGE);}});
         person.setFood(new HashSet<Food>(){{
             Food food = new Food();
             food.setName("test");
@@ -237,8 +241,8 @@ public class TestPersonService {
         Set<Color> oldFavoriteColor = person.getColor();
 
         assertEquals(1, person.getColor().size());
-        assertTrue(person.getColor().contains(Color.yellow));
-        person.setColor(new HashSet<Color>(){{add(Color.blue); add(Color.green);}});
+        assertTrue(person.getColor().contains(Color.YELLOW));
+        person.setColor(new HashSet<Color>(){{add(Color.BLUE); add(Color.GREEN);}});
         Person personModified = dao.updateById(1, person);
 
         assertEquals(oldFirstName, personModified.getFirstName());
@@ -247,7 +251,7 @@ public class TestPersonService {
         assertEquals(oldAge, personModified.getAge());
         assertNotSame(oldFavoriteColor, personModified.getColor());
         assertEquals(2, personModified.getColor().size());
-        assertTrue(personModified.getColor().containsAll(new HashSet<Color>(){{add(Color.blue); add(Color.green);}}));
+        assertTrue(personModified.getColor().containsAll(new HashSet<Color>(){{add(Color.BLUE); add(Color.GREEN);}}));
     }
 
     @Test
@@ -340,7 +344,7 @@ public class TestPersonService {
         food.add(food1);
         dao.create("Lena", "Sheva", LocalDate.of(1985, 12 ,18), new HashSet<Color>(){
             {
-                add(Color.blue); add(Color.orange);
+                add(Color.BLUE); add(Color.ORANGE);
             }}, food);
         List<Person> people = dao.searchByParams(buildParams("Lena", null));
         assertEquals(1, people.size());
@@ -348,9 +352,9 @@ public class TestPersonService {
         assertEquals("Lena", person.getFirstName());
         assertEquals("Sheva", person.getLastName());
         assertEquals("1985-12-18", person.getDateOfBirth().toString());
-        assertEquals("30", person.getAge().toString());
-        assertTrue(person.getColor().contains(Color.blue));
-        assertTrue(person.getColor().contains(Color.orange));
+        checkAge(person);
+        assertTrue(person.getColor().contains(Color.BLUE));
+        assertTrue(person.getColor().contains(Color.ORANGE));
         assertEquals(food1.getName(), person.getFood().iterator().next().getName());
     }
 
@@ -361,7 +365,7 @@ public class TestPersonService {
             Food food1 = new Food();
             food1.setName("name");
             food.add(food1);
-            dao.create("Irena", "Ivanov", LocalDate.of(1985, 03 ,23), new HashSet<Color>(){{add(Color.blue); add(Color.orange);}}, food);
+            dao.create("Irena", "Ivanov", LocalDate.of(1985, 03 ,23), new HashSet<Color>(){{add(Color.BLUE); add(Color.ORANGE);}}, food);
             fail("UNIQUE Constraint failed");
         } catch (AlreadyExistsException e) {
             assertTrue(e.getCause() instanceof ConstraintViolationException);
@@ -385,7 +389,7 @@ public class TestPersonService {
         person.setFirstName("Lena");
         person.setLastName("Sheva");
         person.setDateOfBirth(LocalDate.of(1985, 12 ,18));
-        person.setColor(new HashSet<Color>(){{add(Color.blue); add(Color.orange);}});
+        person.setColor(new HashSet<Color>(){{add(Color.BLUE); add(Color.ORANGE);}});
         person.setFood(new HashSet<Food>(){{Food food = new Food();food.setName("test"); add(food);}});
         dao.create(person);
         List<Person> people = dao.searchByParams(buildParams("Lena", null));
@@ -394,13 +398,13 @@ public class TestPersonService {
         assertEquals("Lena", person.getFirstName());
         assertEquals("Sheva", person.getLastName());
         assertEquals("1985-12-18", person.getDateOfBirth().toString());
-        assertEquals("30", person.getAge().toString());
-        assertTrue(person.getColor().contains(Color.blue));
-        assertTrue(person.getColor().contains(Color.orange));
+        checkAge(person);
+        assertTrue(person.getColor().contains(Color.BLUE));
+        assertTrue(person.getColor().contains(Color.ORANGE));
         assertEquals(1, new FoodDAO().findByName("test").size());
     }
 
-    static Map<String, Object> buildParams(String firstName,  String lastName) {
+    private static Map<String, Object> buildParams(String firstName,  String lastName) {
         Map<String, Object> params = new HashMap<>();
         if (firstName != null) {
             params.put("firstName", firstName);
@@ -409,5 +413,9 @@ public class TestPersonService {
             params.put("lastName", lastName);
         }
         return params;
+    }
+
+    private void checkAge(Person person) {
+        assertEquals(ChronoUnit.YEARS.between(person.getDateOfBirth(), LocalDateTime.now()), person.getAge().intValue());
     }
 }

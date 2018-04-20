@@ -38,7 +38,7 @@ public class PersonCreateScenarios extends Steps {
         deleteAllData();
     }
 
-    @Given("create new person request with <firstName>, <lastName>, <dateOfBirth> with media type <mediaType>.")
+    @Given("person create request with <firstName>, <lastName>, <dateOfBirth> with media type <mediaType>.")
     public void givenCreateNewPersonRequestWithParams(@Named("firstName") String firstName,
                                                       @Named("lastName") String lastName,
                                                       @Named("dateOfBirth") String dateOfBirth,
@@ -47,7 +47,7 @@ public class PersonCreateScenarios extends Steps {
         person.setFirstName(firstName);
         person.setLastName(lastName);
         person.setDateOfBirth(LocalDate.parse(dateOfBirth, dateFormatter));
-        Set<Color> colors = new HashSet<Color>() {{add(Color.blue); add(Color.red);}};
+        Set<Color> colors = new HashSet<Color>() {{add(Color.BLUE); add(Color.RED);}};
         person.setColor(colors);
         Set<Food> food = new HashSet<Food>() {{add(new Food("some"));}};
         person.setFood(food);
@@ -65,29 +65,13 @@ public class PersonCreateScenarios extends Steps {
     public void thenNewPersonSuccessfullyCreated(@Named("statusCode") int statusCode,
                                                  @Named("firstName") String firstName,
                                                  @Named("lastName") String lastName,
-                                                 @Named("dateOfBirth") String dateOfBirth) throws Exception {
+                                                 @Named("dateOfBirth") String dateOfBirth) {
         Response response = requestBuilder.invoke();
         assertEquals(statusCode, response.getStatus());
         assertNull(response.getMediaType());
         Person personCreated = new PersonDAO().searchByParams(firstName, lastName, LocalDate.parse(dateOfBirth, dateFormatter)).get(0);
         assertTrue(response.getLocation().getPath().contains("people/" + personCreated.getId()));
     }
-
-//    @Given("create person request with <firstName>, <lastName>, <dateOfBirth> with media type <mediaType>.")
-//    public void givenPersonNewRequestWithParams(@Named("firstName") String firstName,
-//                                                @Named("lastName") String lastName,
-//                                                @Named("dateOfBirth") String dateOfBirth,
-//                                                @Named("mediaType") String mediaType) {
-//        Person person = new Person();
-//        person.setFirstName(firstName);
-//        person.setLastName(lastName);
-//        person.setDateOfBirth(LocalDate.parse(dateOfBirth, dateFormatter));
-//        Set<Color> colors = new HashSet<Color>() {{add(Color.blue); add(Color.red);}};
-//        person.setColor(colors);
-//        Set<Food> food = new HashSet<Food>() {{add(new Food("some"));}};
-//        person.setFood(food);
-//        requestBuilder = getTarget().path("people").request().accept(mediaType).buildPost(Entity.entity(person, mediaType));
-//    }
 
     @When("person with <firstName>, <lastName>, <dateOfBirth> exists in database.")
     public void whenFoodRecordExistsAlreadyInDatabaseWithParams(@Named("firstName") String firstName,

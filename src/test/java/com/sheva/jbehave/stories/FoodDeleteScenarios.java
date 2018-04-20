@@ -44,7 +44,7 @@ public class FoodDeleteScenarios extends Steps {
     }
 
     @Then("method not allowed error $statusCode returned on attempt to delete food entity.")
-    public void thenMethodNotSupportedForCreate(@Named("statusCode") int statusCode) throws Exception {
+    public void thenMethodNotSupportedForCreate(@Named("statusCode") int statusCode) {
         Response response = requestBuilder.invoke();
         assertEquals(statusCode, response.getStatus());
     }

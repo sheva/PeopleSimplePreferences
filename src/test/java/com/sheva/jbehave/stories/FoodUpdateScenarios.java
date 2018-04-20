@@ -13,8 +13,8 @@ import javax.ws.rs.core.Response;
 
 import static com.sheva.db.DatabaseTestHelper.*;
 import static com.sheva.jbehave.stories.AppStories.getTarget;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -119,7 +119,7 @@ public class FoodUpdateScenarios extends Steps {
                                                         @Named("statusCode") int statusCode,
                                                         @Named("field") String field,
                                                         @Named("newValue") String newValue,
-                                                        @Named("mediaType") String mediaType){
+                                                        @Named("mediaType") String mediaType) {
         Response response = requestBuilder.invoke();
         assertEquals(statusCode, response.getStatus());
         assertEquals(mediaType, response.getMediaType().toString());

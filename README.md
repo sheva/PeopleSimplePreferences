@@ -56,7 +56,7 @@ You can search by `firstName` and/or `lastName`.
 
 Create new person:
 
-    curl -i -X POST -H 'Content-Type: application/json' -d '{"firstName": "John", "lastName": "Smith", "dateOfBirth": "1985-12-18", "favoriteColor": ["yellow"], "favoriteFood": [{"name": "chocolate"}]}' http://localhost:8080/preferences/people
+    curl -i -X POST -H 'Content-Type: application/json' -d '{"firstName": "John", "lastName": "Smith", "dateOfBirth": "1985-12-18", "favoriteColor": ["YELLOW"], "favoriteFood": [{"name": "chocolate"}]}' http://localhost:8080/preferences/people
 
 You can send data in XML format too:
 
@@ -74,7 +74,7 @@ To see all possible RESTful options for `/preferences/people/1`, use `-X OPTIONS
 
 Update person details:
 
-    curl -i -X PUT -H 'Content-Type: application/json' -d '{"id":1,"firstName":"John","lastName":"Smith","dateOfBirth":"1988-12-23","favoriteColor":["yellow"],"favoriteFood":[{"name":"chocolate"}]}' http://localhost:8080/preferences/people/1
+    curl -i -X PUT -H 'Content-Type: application/json' -d '{"id":1,"firstName":"John","lastName":"Smith","dateOfBirth":"1988-12-23","favoriteColor":["YELLOW"],"favoriteFood":[{"name":"chocolate"}]}' http://localhost:8080/preferences/people/1
 
 There is the same validation for the person update as for its creation. If you'll try to update _not existing person_ - it will return `HTTP 404 Not Found`.
 

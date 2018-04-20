@@ -45,7 +45,7 @@ public class PersonUpdateScenarios extends Steps {
     public void updateSpecificPersonByFieldValue(@Named("id") int id,
                                                  @Named("field") String field,
                                                  @Named("newValue") String value,
-                                                 @Named("mediaType") String mediaType) throws Exception {
+                                                 @Named("mediaType") String mediaType) {
         Person person = new PersonDAO().findById(id);
         switch (field) {
             case "firstName" : person.setFirstName(value); break;
@@ -58,7 +58,7 @@ public class PersonUpdateScenarios extends Steps {
     @When("person exists with <field>:<oldValue> pair and <id> in database.")
     public void personExistsWithPairInDatabase(@Named("id") int id,
                                                @Named("field") String field,
-                                               @Named("oldValue") String oldValue) throws Exception {
+                                               @Named("oldValue") String oldValue) {
         List people = executeSqlQuery("select * from PERSON where " + field + "='" + oldValue+"' and personId=" + id);
         assertEquals(1, people.size());
     }
@@ -88,7 +88,7 @@ public class PersonUpdateScenarios extends Steps {
 
     @Given("update request to specific person with id=<id>. Request supported type <mediaType>.")
     public void givenRequestToUpdateForNotExistingPerson(@Named("id") int id,
-                                                         @Named("mediaType") String mediaType) throws Exception {
+                                                         @Named("mediaType") String mediaType) {
         Person person = new PersonDAO().findById(1); // Just to create object
         requestBuilder = getTarget().path("people/" + id).
                 request().accept(mediaType).buildPut(Entity.entity(person, mediaType));

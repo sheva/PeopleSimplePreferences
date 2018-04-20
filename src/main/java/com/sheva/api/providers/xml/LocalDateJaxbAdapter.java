@@ -28,7 +28,7 @@ public class LocalDateJaxbAdapter extends XmlAdapter<String, LocalDate> {
         try {
             return (trimToNull(localDateStr) != null) ? LocalDate.parse(localDateStr, DATE_FORMATTER) : null;
         } catch (DateTimeParseException e) {
-            LOGGER.log(Level.WARNING, "Invalid color property value found in request " + localDateStr);
+            LOGGER.log(Level.WARNING, "Invalid date value found in request " + localDateStr);
             throw new InvalidRequestDataException(null, "date", localDateStr, e);
         }
     }

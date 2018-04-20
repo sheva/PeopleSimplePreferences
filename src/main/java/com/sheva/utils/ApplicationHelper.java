@@ -29,7 +29,7 @@ public final class ApplicationHelper {
 
     public static Class getEntityClass(Object obj) {
         try {
-            return Class.forName(((ParameterizedTypeImpl)obj.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0].getTypeName());
+            return Class.forName(((ParameterizedTypeImpl)obj.getClass().getGenericSuperclass()).getActualTypeArguments()[0].getTypeName());
         } catch (ClassNotFoundException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
             throw new WebApplicationException(e.getMessage(), e);

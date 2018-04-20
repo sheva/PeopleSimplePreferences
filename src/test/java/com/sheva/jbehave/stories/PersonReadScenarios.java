@@ -44,7 +44,7 @@ public class PersonReadScenarios extends Steps {
     }
 
     @When("there is $amount people in the database.")
-    public void whenThereIsAmountPeople(@Named("amount") int amount) throws Exception {
+    public void whenThereIsAmountPeople(@Named("amount") int amount) {
         List people = DatabaseTestHelper.executeSqlQuery("select * from PERSON");
         assertEquals(amount, people.size());
     }
