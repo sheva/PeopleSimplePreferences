@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,7 +25,12 @@ public class DatabaseTestHelper {
 
     private static final Logger logger = Logger.getLogger(DatabaseTestHelper.class.getName());
 
-    private static void executeNativeQueriesFromFiles(Path... paths) throws Exception {
+    public static void prepareDatabase() throws IOException {
+        DatabaseTestHelper.deleteAllData();
+        DatabaseTestHelper.loadTestData();
+    }
+
+    private static void executeNativeQueriesFromFiles(Path... paths) throws IOException {
         SessionFactory factory = Database.INSTANCE.getFactory();
 
         try (Session session = factory.openSession()) {
@@ -78,11 +84,11 @@ public class DatabaseTestHelper {
         }
     }
 
-    public static void deleteAllData() throws Exception {
+    public static void deleteAllData() throws IOException {
         executeNativeQueriesFromFiles(Paths.get("src/test/resources/db/deleteData.sql"));
     }
 
-    public static void loadTestData() throws Exception {
+    public static void loadTestData() throws IOException {
         executeNativeQueriesFromFiles(Paths.get("src/test/resources/db/loadTestData.sql"));
     }
 

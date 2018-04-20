@@ -17,6 +17,8 @@ public class LoggingConfiguration  {
     private final static Logger logger = Logger.getLogger(LoggingConfiguration.class.getName());
 
     public static void configure() {
+        Logger log = Logger.getLogger("com.sheva");
+        log.setLevel(Level.ALL);
         try {
             LogManager.getLogManager().readConfiguration(new FileInputStream(Paths.get("src/main/resources/log.properties").toFile()));
         } catch (IOException e) {

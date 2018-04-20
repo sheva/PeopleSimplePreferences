@@ -22,6 +22,7 @@ import javax.ws.rs.client.WebTarget;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.sheva.ServerStarter.startHttpServer;
 import static org.jbehave.core.io.CodeLocations.codeLocationFromPath;
 import static org.jbehave.core.reporters.Format.*;
 
@@ -43,7 +44,7 @@ public class AppStories extends JUnitStories {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        server = ServerStarter.startServer();
+        server = startHttpServer();
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.register(PersonMessageBodyHandler.class);
         clientConfig.register(FoodCollectionMessageBodyWriter.class);
@@ -63,7 +64,7 @@ public class AppStories extends JUnitStories {
     }
 
     static WebTarget getTarget() {
-        return client.target(ServerStarter.BASE_URI);
+        return client.target(ServerStarter.applicationPath);
     }
 
     @Override

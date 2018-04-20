@@ -1,23 +1,20 @@
 package com.sheva.services;
 
+import com.sheva.api.exceptions.AlreadyExistsException;
+import com.sheva.api.exceptions.EntityNotFoundException;
 import com.sheva.data.Color;
 import com.sheva.data.Food;
 import com.sheva.data.Person;
 import com.sheva.db.DatabaseTestHelper;
-import com.sheva.api.exceptions.AlreadyExistsException;
-import com.sheva.api.exceptions.EntityNotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
-import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 import static com.sheva.db.DatabaseTestHelper.deleteAllData;

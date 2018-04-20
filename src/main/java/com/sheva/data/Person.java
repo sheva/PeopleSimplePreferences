@@ -2,8 +2,9 @@ package com.sheva.data;
 
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.sheva.api.providers.json.ColorJsonAdapter;
 import com.sheva.api.providers.json.LocalDateJsonAdapter;
-import com.sheva.api.providers.xml.ColorEnumJaxbAdapter;
+import com.sheva.api.providers.xml.ColorJaxbAdapter;
 import com.sheva.api.providers.xml.LocalDateJaxbAdapter;
 import com.sheva.api.providers.xml.XmlRootElementCollection;
 import io.swagger.annotations.ApiModel;
@@ -68,12 +69,13 @@ public class Person implements Serializable {
     @Cascade(CascadeType.ALL)
     @CollectionTable(name = "PERSON_COLOR_PREFERENCES", joinColumns = @JoinColumn(name = "personId"))
     @Column(name = "color", nullable = false)
-    @XmlJavaTypeAdapter(ColorEnumJaxbAdapter.class)
+    @JsonAdapter(ColorJsonAdapter.class)
+    @XmlJavaTypeAdapter(ColorJaxbAdapter.class)
     @Enumerated(EnumType.STRING)
     @SerializedName("favoriteColor")
     @XmlElementWrapper(name = "favoriteColor")
     @ApiModelProperty(value = "Represent collection of favorite color",
-            allowableValues = "RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET")
+            allowableValues = "RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET, WHITE, BLACK")
     private Set<Color> color = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)

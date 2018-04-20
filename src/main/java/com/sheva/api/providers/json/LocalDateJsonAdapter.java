@@ -36,7 +36,7 @@ public class LocalDateJsonAdapter implements JsonSerializer<LocalDate>, JsonDese
         try {
             return LocalDate.parse(dateStr, FORMATTER);
         } catch (DateTimeParseException e) {
-            LOGGER.log(WARNING, String.format("Invalid color property value found in request %s.", dateStr));
+            LOGGER.log(WARNING, String.format("Invalid date value found in request %s.", dateStr));
             throw new InvalidRequestDataException(null, "date", dateStr, e);
         }
     }

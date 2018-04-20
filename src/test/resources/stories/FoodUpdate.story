@@ -11,7 +11,6 @@ Examples:
 |5|name|chocolate|someTest|application/json|
 |7|name|some tasty|someTest|application/xml|
 
-
 Scenario: Check that Error 404 response returned if try to update non-existing food record.
 
 Given update request to specific food with id=<id>. Request supports <mediaType> media type.
@@ -22,7 +21,6 @@ Examples:
 |id|mediaType|
 |123|application/xml|
 |234|application/json|
-
 
 Scenario: Success if update food entity with duplicated data.
 

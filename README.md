@@ -21,11 +21,11 @@ Built using:
 
 ## Details
 
-Implemented date of birth instead of age, because age is dynamic value. But also "age" field added - it's read-only & auto-calculated from date of birth.
+Implemented date of birth instead of age, because age is dynamic value. But "age" also present in model as transient field - it's read-only & auto-calculated from date of birth.
 
-Implemented multiple preferences for color & food. Color preferences are sub-set of pre-defined colors so I used `enum`. Food preferences are user-generated so I've used a separate DB table & relation one-to-many.
+Implemented multiple preferences for color & food. Color preferences are sub-set of pre-defined colors represented by `enum`. Food preferences are user-generated.
 
-Added constraint for unique first name + last name + date of birth. You can't create two persons with same fields.
+Added constraint for uniqueness of first name + last name + date of birth.
 
 ## Try it!
 
@@ -36,7 +36,7 @@ Run the web app (for dev/test only):
 
 ### JSON or XML
 
-By default, all results will be returned in JSON format. You can ask for it explicitly via `-H 'Accept: application/json'` (that's for `curl`). To get data in XML, use `-H 'Accept: application/xml'`.
+By default, all results will be returned in JSON format. You can manage response media type by implicitly adding `-H 'Accept: application/json'` (that's for `curl`). To get data in XML media format, use `-H 'Accept: application/xml'`.
 
 To submit data, you should always provide `Content-Type` header (there are no defaults for it). To send data in JSON, use `-H 'Content-Type: application/json'`. To send data in XML, use `-H 'Content-Type: application/xml'`.
 
@@ -62,7 +62,7 @@ You can send data in XML format too:
 
     curl -i -X POST -H 'Content-Type: application/xml' -d '<person><id>1</id><firstName>Petr</firstName><lastName>Petrov</lastName><dateOfBirth>1985-12-18</dateOfBirth><favoriteFood><food><name>chocolate</name></food><food><name>banana</name></food></favoriteFood></person>' http://localhost:8080/preferences/people
 
-If the person _John Smith (1985-12-18)_ already exists, there will be `HTTP 409 Conflict` with error message in body. If the color is _unexpected_ - there will be `HTTP 400 Bad Request` with error message in body. Otherwise, there will be `HTTP 201 Created` with empty body & `Location: link-to-created-person` header.
+If the person _John Smith (1985-12-18)_ already exists, there will be `HTTP 409 Conflict` with error message in the HTTP response body. If the color is _unexpected_ - there will be `HTTP 400 Bad Request` with error message in the body. Otherwise, there will be `HTTP 201 Created` with empty HTTP response body & `Location: link-to-created-person` header.
 
 ### Person
 

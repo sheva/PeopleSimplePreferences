@@ -13,9 +13,9 @@ import static java.util.logging.Level.WARNING;
  *
  * Created by Sheva on 10/7/2016.
  */
-public class ColorEnumJaxbAdapter extends XmlAdapter<String, Color> {
+public class ColorJaxbAdapter extends XmlAdapter<String, Color> {
 
-    private static final Logger LOGGER = Logger.getLogger(ColorEnumJaxbAdapter.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ColorJaxbAdapter.class.getName());
 
     public Color unmarshal(String value) throws InvalidRequestDataException {
         try {

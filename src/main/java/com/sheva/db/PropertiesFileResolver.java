@@ -35,4 +35,12 @@ public enum PropertiesFileResolver {
     public String getDatabaseDateFormat() {
         return properties.getProperty("hibernate.connection.date_string_format");
     }
+
+    public String getApplicationURL() {
+        return "http://" + properties.getProperty("application.host") + ":" + properties.getProperty("application.post");
+    }
+
+    public String getContextPath() {
+        return properties.getProperty("application.context.path");
+    }
 }
