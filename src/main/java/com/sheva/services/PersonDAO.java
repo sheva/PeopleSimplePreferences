@@ -38,6 +38,11 @@ public class PersonDAO implements AbstractDAO<Person> {
     }
 
     @Override
+    public Logger getLogger() {
+        return logger;
+    }
+
+    @Override
     public Person create(Person person) throws HibernateException {
         return save(null, person);
     }
@@ -123,11 +128,6 @@ public class PersonDAO implements AbstractDAO<Person> {
 
             return person;
         });
-    }
-
-    @Override
-    public Logger getLogger() {
-        return logger;
     }
 
     private void delete(final Session predefSession, Person person) throws HibernateException {

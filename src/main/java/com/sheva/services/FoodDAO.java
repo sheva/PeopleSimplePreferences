@@ -32,6 +32,11 @@ public class FoodDAO implements AbstractDAO<Food> {
         return Food.class;
     }
 
+    @Override
+    public Logger getLogger() {
+        return logger;
+    }
+
     public Food updateById(final int id, final String name) throws WebApplicationException {
         return executeQuery((Session session) -> {
             Food food = (Food) session.createQuery("from Food where id=:id ").setParameter("id", id).uniqueResult();
@@ -57,11 +62,6 @@ public class FoodDAO implements AbstractDAO<Food> {
     @Override
     public Food update(Food food) throws HibernateException {
         return executeQuery((Session session)-> {session.update(food); return food;});
-    }
-
-    @Override
-    public Logger getLogger() {
-        return logger;
     }
 
     @Override

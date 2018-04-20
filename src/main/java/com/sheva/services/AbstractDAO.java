@@ -29,10 +29,10 @@ import java.util.logging.Logger;
 interface AbstractDAO<E> {
 
     SessionFactory getFactory();
-
     E create(E entity) throws HibernateException;
     E update(E entity) throws HibernateException;
     void delete(E entity) throws HibernateException;
+
     Class getEntityClass();
     Logger getLogger();
 
@@ -98,10 +98,7 @@ interface AbstractDAO<E> {
             query.append("from ").append(entityClassName);
 
             final AtomicInteger index = new AtomicInteger(0);
-            params.entrySet().stream().forEachOrdered(param -> {
-                Object value = param.getValue();
-                String property = param.getKey();
-
+            params.forEach((property, value) -> {
                 if (value instanceof String) {
                     value = StringUtils.trimToNull((String)value);
                 }
@@ -124,7 +121,7 @@ interface AbstractDAO<E> {
 
             Query hibQuery = session.createQuery(query.toString());
 
-            params.forEach((key, value) -> {
+            params.forEach((property, value) -> {
                 if (value instanceof String) {
                     value = StringUtils.trimToNull((String) value);
                 }
@@ -132,7 +129,7 @@ interface AbstractDAO<E> {
                     return;
                 }
 
-                hibQuery.setParameter(key, (value instanceof String) ? "%" + value + "%" : value);
+                hibQuery.setParameter(property, (value instanceof String) ? "%" + value + "%" : value);
             });
 
             getLogger().log(Level.FINEST, String.format("Query for %s constructed %s", getEntityClass(), hibQuery.getQueryString()));
