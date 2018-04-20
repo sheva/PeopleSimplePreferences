@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.sheva.api.providers.xml.JaxbMarshallerProvider;
 import com.sheva.api.providers.xml.XmlRootElementCollection;
 import com.sheva.utils.ApplicationHelper;
 import org.apache.commons.lang.StringUtils;
@@ -22,10 +21,10 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import static com.sheva.api.providers.xml.JaxbMarshallerProvider.INSTANCE;
 import static java.util.logging.Level.*;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML_TYPE;
-import static com.sheva.api.providers.xml.JaxbMarshallerProvider.INSTANCE;
 
 /**
  * Base class for message body writers operated with collection of entities.
@@ -60,7 +59,6 @@ abstract class CollectionMessageBodyWriter<E> {
 
         list.forEach(item -> {
             JsonElement jsonItem = gson.toJsonTree(item);
-            appendCustomToJson(gson, item, jsonItem.getAsJsonObject());
             root.add(jsonItem);
         });
 
@@ -70,7 +68,7 @@ abstract class CollectionMessageBodyWriter<E> {
         outputStream.write(json.getBytes());
     }
 
-    private void writeXml(ArrayList<E> list, OutputStream outputStream) throws IOException {
+    private void writeXml(ArrayList<E> list, OutputStream out) throws IOException {
         final Document document = DocumentHelper.createDocument();
         final Element root = document.addElement(buildRootElement());
 
@@ -81,18 +79,17 @@ abstract class CollectionMessageBodyWriter<E> {
                 INSTANCE.createMarshaller().marshal(item, xmlStream);
 
                 Document personDoc = DocumentHelper.parseText(stringWriter.toString());
-                Element rootElement = personDoc.getRootElement();
-                appendCustomToXml(item, rootElement);
+                Element personRoot = personDoc.getRootElement();
 
-                root.add(rootElement.detach());
+                root.add(personRoot.detach());
 
-            } catch (JAXBException | IOException | XMLStreamException | DocumentException exception) {
-                logger.log(SEVERE, String.format("Error serializing object '%s' to the output stream.", item), exception);
-                throw new WebApplicationException("Error serializing to the output stream.", exception);
+            } catch (JAXBException | IOException | XMLStreamException | DocumentException e) {
+                logger.log(SEVERE, String.format("Error serializing object '%s' to the output stream.", item), e);
+                throw new WebApplicationException("Error serializing to the output stream.", e);
             }
         });
 
-        outputStream.write(document.asXML().getBytes());
+        out.write(document.asXML().getBytes());
     }
 
     protected abstract Class getEntityClass();
@@ -104,8 +101,4 @@ abstract class CollectionMessageBodyWriter<E> {
         logger.log(FINE, String.format("XML node name set to '%s' for collection of %s.", name, getEntityClass().getSimpleName()));
         return new QName(name);
     }
-
-    protected void appendCustomToXml(E entity, Element element) {}
-
-    protected void appendCustomToJson(Gson gson, E entity, JsonElement element) {}
 }

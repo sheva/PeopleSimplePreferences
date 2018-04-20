@@ -58,7 +58,7 @@ public class LocalDateType implements UserType {
 
             if (dateString != null) {
                 LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(DATE_FORMAT));
-                logger.log(Level.FINE, "Getting date " + dateString);
+                logger.log(Level.FINEST, "Get date " + dateString);
                 return date;
             }
         }
@@ -70,9 +70,10 @@ public class LocalDateType implements UserType {
                             SharedSessionContractImplementor implementor) throws HibernateException, SQLException {
         if (value == null) {
             statement.setNull(index, Types.VARCHAR);
+            logger.log(Level.FINEST, "Date set to null.");
         } else {
             String date = ((LocalDate) value).format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-            logger.log(Level.FINE, "Setting date " + date);
+            logger.log(Level.FINEST, "Date set to " + date);
             statement.setString(index, date);
         }
     }

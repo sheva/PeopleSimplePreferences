@@ -175,7 +175,7 @@ public class Person implements Serializable {
 
         Person person = (Person) o;
 
-        if (id != person.id) return false;
+        if (id.equals(person.id)) return false;
         if (!firstName.equals(person.firstName)) return false;
         if (lastName != null ? !lastName.equals(person.lastName) : person.lastName != null) return false;
         return dateOfBirth != null ? dateOfBirth.equals(person.dateOfBirth) : person.dateOfBirth == null;

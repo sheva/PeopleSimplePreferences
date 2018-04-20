@@ -20,10 +20,10 @@ public enum Database {
         Configuration configuration = new Configuration() {
             @Override
             public Configuration mergeProperties(Properties properties) {
-                properties.entrySet().forEach(
-                        propFromFile -> getProperties().entrySet().stream().
-                                filter(property -> property.getValue()!= null && property.getValue().toString().equalsIgnoreCase("${" + propFromFile.getKey() + "}")).
-                                forEach(property -> setProperty((String) property.getKey(), (String) propFromFile.getValue())));
+                properties.forEach(
+                        (key, value) -> getProperties().entrySet().stream().
+                                filter(property -> property.getValue()!= null && property.getValue().toString().equalsIgnoreCase("${" + key + "}")).
+                                forEach(property -> setProperty((String) property.getKey(), (String) value)));
                 return this;
             }
         }.configure().mergeProperties(PropertiesFileResolver.INSTANCE.getProperties());

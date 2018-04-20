@@ -13,28 +13,12 @@ import java.util.logging.Logger;
  */
 public final class ApplicationHelper {
 
-    private final static Logger logger = Logger.getLogger(ApplicationHelper.class.getName());
-
-    private ApplicationHelper() {}
-
     public static Type getTypeOfParameterByIndexForClass(Type type, int typeIndex) {
         return type instanceof ParameterizedType ? ((ParameterizedType)type).getActualTypeArguments()[typeIndex] : null;
     }
 
+    @SuppressWarnings("unchecked")
     public static <A extends Annotation> A getAnnotation(Class clazz, Class<? extends Annotation> annotation) {
         return clazz != null && clazz.isAnnotationPresent(annotation) ? (A) clazz.getAnnotation(annotation) : null;
-    }
-
-    public static Class getClassOfParameterByIndexForClass(Type type, int typeIndex) {
-       return getClassByType(getTypeOfParameterByIndexForClass(type, typeIndex));
-    }
-
-    public static Class getClassByType(Type type) {
-        try {
-            return Class.forName(type.getTypeName());
-        } catch (ClassNotFoundException exception) {
-            logger.log(Level.SEVERE, exception.getMessage(), exception);
-        }
-        return null;
     }
 }

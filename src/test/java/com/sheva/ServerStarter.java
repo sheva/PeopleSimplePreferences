@@ -17,7 +17,7 @@ import java.nio.file.Paths;
  */
 public class ServerStarter {
 
-    public static final String HOST_PORT = "http://0.0.0.0:8080/";
+    public static final String HOST_PORT = "http://0.0.0.0:8084/";
     public static final String BASE_URI = HOST_PORT + "preferences/";
 
     public static HttpServer startServer() throws Exception {

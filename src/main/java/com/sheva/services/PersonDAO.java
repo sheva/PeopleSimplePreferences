@@ -138,8 +138,8 @@ public class PersonDAO implements AbstractDAO<Person> {
         });
     }
 
-    private Person update(final Session predefSession, Person person) throws HibernateException {
-        return executeQuery((Session session) -> {
+    private void update(final Session predefSession, Person person) throws HibernateException {
+        executeQuery((Session session) -> {
             if (predefSession != null) session = predefSession;
             session.update(person);
             return person;

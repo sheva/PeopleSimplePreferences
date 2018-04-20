@@ -126,9 +126,9 @@ public class PersonMessageBodyHandler implements MessageBodyWriter<Person>, Mess
         try {
             JaxbMarshallerProvider.INSTANCE.createMarshaller().marshal(person, outputStream);
             logger.log(FINEST, String.format("Serialized object for <person:id=%d> : %s.", person.getId(), person));
-        } catch (JAXBException jaxbException) {
-            logger.log(SEVERE, String.format("Error constructing object for <person:id=%d>: %s.", person.getId(), jaxbException));
-            throw new WebApplicationException("Error serializing to the output stream.", jaxbException);
+        } catch (JAXBException e) {
+            logger.log(SEVERE, String.format("Error constructing object for <person:id=%d>: %s.", person.getId(), e));
+            throw new WebApplicationException("Error serializing to the output stream.", e);
         }
     }
 

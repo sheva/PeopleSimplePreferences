@@ -22,9 +22,9 @@ public enum JaxbMarshallerProvider {
     JaxbMarshallerProvider() {
         try {
             jaxbContext = JAXBContext.newInstance(Food.class, Person.class);
-        } catch (JAXBException jaxbException) {
-            logger.log(Level.SEVERE, jaxbException.getMessage(), jaxbException);
-            throw new WebApplicationException(jaxbException.getMessage(), jaxbException);
+        } catch (JAXBException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            throw new WebApplicationException(e.getMessage(), e);
         }
     }
 

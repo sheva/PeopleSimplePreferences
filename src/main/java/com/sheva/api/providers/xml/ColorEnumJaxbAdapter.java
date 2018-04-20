@@ -4,7 +4,6 @@ import com.sheva.api.exceptions.InvalidRequestDataException;
 import com.sheva.data.Color;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.util.logging.Level.WARNING;
@@ -19,14 +18,9 @@ public class ColorEnumJaxbAdapter extends XmlAdapter<String, Color> {
     private static final Logger LOGGER = Logger.getLogger(ColorEnumJaxbAdapter.class.getName());
 
     public Color unmarshal(String value) throws InvalidRequestDataException {
-        if (value == null) {
-            LOGGER.log(WARNING, "Invalid color property value found in request " + value);
-            throw new InvalidRequestDataException(null, "color", null, new IllegalArgumentException(), "available values: " + Color.printAllValues());
-        }
-
         try {
             return Color.valueOf(value.toUpperCase());
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             LOGGER.log(WARNING, "Invalid color property value found in request " + value);
             throw new InvalidRequestDataException(null, "color", value, e, "available values: " + Color.printAllValues());
         }

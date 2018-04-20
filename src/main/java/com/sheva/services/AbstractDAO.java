@@ -53,7 +53,6 @@ interface AbstractDAO<E> {
             if (transaction != null) {
                 transaction.rollback();
             }
-
             if (e.getCause() instanceof ConstraintViolationException) {
                 ConstraintViolationException constraint = (ConstraintViolationException) e.getCause();
                 getLogger().log(Level.WARNING, e.toString(), e);
@@ -125,10 +124,7 @@ interface AbstractDAO<E> {
 
             Query hibQuery = session.createQuery(query.toString());
 
-            params.entrySet().forEach(param -> {
-                Object value = param.getValue();
-                String property = param.getKey();
-
+            params.forEach((key, value) -> {
                 if (value instanceof String) {
                     value = StringUtils.trimToNull((String) value);
                 }
@@ -136,12 +132,12 @@ interface AbstractDAO<E> {
                     return;
                 }
 
-                hibQuery.setParameter(property, (value instanceof String) ? "%" + value + "%" : value);
+                hibQuery.setParameter(key, (value instanceof String) ? "%" + value + "%" : value);
             });
 
-            getLogger().log(Level.FINE, String.format("Query for %s constructed %s", getEntityClass(), hibQuery.getQueryString()));
+            getLogger().log(Level.FINEST, String.format("Query for %s constructed %s", getEntityClass(), hibQuery.getQueryString()));
+
             return hibQuery.list();
         });
     }
-
 }
