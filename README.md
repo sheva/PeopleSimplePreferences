@@ -3,17 +3,14 @@ People Simple Preferences
 
 RESTful API to manage personal info (name, age) and personal preferences (food, color).
 
-Built using:
+The project uses the following technologies: 
 
-* Jersey
-* Grizzly
-* SQLite
-* Hibernate
-* Gson
-* Maven
-* JUnit
-* JBehave
-* Swagger.io
+* web/REST: Grizzly, Jersey
+* marshalling: GSON (for JSON) and JAXB (for XML) 
+* persistence: Hibernate, SQLite
+* building: Maven
+* testing: JUnit, JBehave
+* documenting: Swagger.io
 
 ## Install
 
