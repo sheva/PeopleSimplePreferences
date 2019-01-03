@@ -25,7 +25,8 @@ public class LocalDateJsonAdapter implements JsonSerializer<LocalDate>, JsonDese
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
     @Override
-    public LocalDate deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+    public LocalDate deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context)
+            throws JsonParseException {
         if (!(jsonElement instanceof JsonPrimitive)) {
             final String message = String.format("The date should be a string value: %s.", jsonElement);
             LOGGER.log(WARNING, message);
@@ -42,7 +43,7 @@ public class LocalDateJsonAdapter implements JsonSerializer<LocalDate>, JsonDese
     }
 
     @Override
-    public JsonElement serialize(LocalDate localDate, Type type, JsonSerializationContext jsonSerializationContext) {
+    public JsonElement serialize(LocalDate localDate, Type type, JsonSerializationContext context) {
         return new JsonPrimitive(localDate.format(FORMATTER));
     }
 }

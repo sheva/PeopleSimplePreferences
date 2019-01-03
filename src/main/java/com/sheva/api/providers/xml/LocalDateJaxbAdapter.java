@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
+import static com.sheva.db.PropertiesFileResolver.INSTANCE;
 
 /**
  * XML Adapter class for String <-> LocalDate transfers.
@@ -21,7 +22,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 public class LocalDateJaxbAdapter extends XmlAdapter<String, LocalDate> {
 
     private static final Logger LOGGER = Logger.getLogger(LocalDateJaxbAdapter.class.getName());
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(PropertiesFileResolver.INSTANCE.getDatabaseDateFormat());
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(INSTANCE.getDatabaseDateFormat());
 
     @Override
     public LocalDate unmarshal(String localDateStr) {

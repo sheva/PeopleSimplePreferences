@@ -31,6 +31,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML_TYPE;
+import static com.sheva.api.providers.xml.JaxbMarshallerProvider.INSTANCE;
 
 /**
  * Provides custom writing Person beans to JSON in order to avoid recursion caused by Many-To-Many relationship.
@@ -86,7 +87,7 @@ public class PersonMessageBodyHandler implements MessageBodyWriter<Person>, Mess
 
     private Person readXml(InputStream stream) throws WebApplicationException {
         try {
-            final Person person = (Person) JaxbMarshallerProvider.INSTANCE.createUnmarshaller().unmarshal(stream);
+            final Person person = (Person) INSTANCE.createUnmarshaller().unmarshal(stream);
             resetFoodElements(person);
             logger.log(FINEST, String.format("Deserialization from XML object <person:id=%d>: %s failed.", person.getId(), person));
             return person;
@@ -105,9 +106,9 @@ public class PersonMessageBodyHandler implements MessageBodyWriter<Person>, Mess
     public void writeTo(Person person, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType,
                         MultivaluedMap<String, Object> multivaluedMap, OutputStream output)
             throws IOException, WebApplicationException {
-        if (mediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE)) {
+        if (mediaType.isCompatible(APPLICATION_JSON_TYPE)) {
             writeJson(person, output);
-        } else if (mediaType.isCompatible(MediaType.APPLICATION_XML_TYPE)) {
+        } else if (mediaType.isCompatible(APPLICATION_XML_TYPE)) {
             writeXml(person, output);
         } else {
             logger.log(WARNING, String.format("Media type '%s' is not supported.", mediaType));
@@ -116,15 +117,15 @@ public class PersonMessageBodyHandler implements MessageBodyWriter<Person>, Mess
     }
 
     private void writeJson(Person person, OutputStream outputStream) throws IOException {
-        final Gson gson = new GsonBuilder().create();
-        final String personInJson = gson.toJson(person);
+        Gson gson = new GsonBuilder().create();
+        String personInJson = gson.toJson(person);
         outputStream.write(personInJson.getBytes());
         logger.log(FINEST, String.format("Serialized object for <person:id=%d> : %s.", person.getId(), personInJson));
     }
 
     private void writeXml(Person person, OutputStream outputStream) {
         try {
-            JaxbMarshallerProvider.INSTANCE.createMarshaller().marshal(person, outputStream);
+            INSTANCE.createMarshaller().marshal(person, outputStream);
             logger.log(FINEST, String.format("Serialized object for <person:id=%d> : %s.", person.getId(), person));
         } catch (JAXBException e) {
             logger.log(SEVERE, String.format("Error constructing object for <person:id=%d>: %s.", person.getId(), e));
@@ -133,7 +134,7 @@ public class PersonMessageBodyHandler implements MessageBodyWriter<Person>, Mess
     }
 
     private void resetFoodElements(Person person) {
-        final Set<Food> newFavoriteFood = new HashSet<>();
+        Set<Food> newFavoriteFood = new HashSet<>();
         person.getFood().forEach(f -> newFavoriteFood.add(new Food(f.getName())));
         person.setFood(newFavoriteFood);
     }

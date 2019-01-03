@@ -14,6 +14,7 @@ import java.util.logging.Logger;
  * Created by Sheva on 10/4/2016.
  */
 public enum JaxbMarshallerProvider {
+
     INSTANCE;
 
     private final Logger logger = Logger.getLogger(JaxbMarshallerProvider.class.getName());

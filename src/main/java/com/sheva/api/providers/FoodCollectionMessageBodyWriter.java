@@ -23,7 +23,8 @@ import static com.sheva.utils.ApplicationHelper.getTypeOfParameterByIndexForClas
  */
 @Provider
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-public class FoodCollectionMessageBodyWriter extends CollectionMessageBodyWriter<Food> implements MessageBodyWriter<ArrayList<Food>> {
+public class FoodCollectionMessageBodyWriter extends CollectionMessageBodyWriter<Food>
+        implements MessageBodyWriter<ArrayList<Food>> {
 
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
@@ -38,7 +39,8 @@ public class FoodCollectionMessageBodyWriter extends CollectionMessageBodyWriter
 
     @Override
     public void writeTo(ArrayList<Food> list, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType,
-                        MultivaluedMap<String, Object> multivaluedMap, OutputStream outputStream) throws WebApplicationException {
+                        MultivaluedMap<String, Object> multivaluedMap, OutputStream outputStream)
+            throws WebApplicationException {
         writeTo(list, mediaType, outputStream);
     }
 

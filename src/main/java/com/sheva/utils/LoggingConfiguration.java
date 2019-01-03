@@ -20,7 +20,8 @@ public class LoggingConfiguration  {
         Logger log = Logger.getLogger("com.sheva");
         log.setLevel(Level.ALL);
         try {
-            LogManager.getLogManager().readConfiguration(new FileInputStream(Paths.get("src/main/resources/log.properties").toFile()));
+            LogManager.getLogManager().readConfiguration(
+                    new FileInputStream(Paths.get("src/main/resources/log.properties").toFile()));
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Error during configuring logging service. " + e.getMessage(), e);
         }

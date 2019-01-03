@@ -6,7 +6,9 @@ import com.sheva.data.Food;
 import com.sheva.data.Person;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
 
+import javax.persistence.PersistenceException;
 import javax.ws.rs.WebApplicationException;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -16,6 +18,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.util.logging.Level.WARNING;
+
 /**
  * DAO class for Person entities manipulations.
  *
@@ -23,7 +27,7 @@ import java.util.logging.Logger;
  */
 public class PersonDAO extends AbstractDAO<Person> {
 
-    private static final Logger logger = Logger.getLogger(PersonDAO.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(PersonDAO.class.getName());
 
     @Override
     public Person create(Person person) throws HibernateException {
@@ -46,7 +50,8 @@ public class PersonDAO extends AbstractDAO<Person> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Person> searchByParams(String firstName, String lastName, LocalDate dateOfBirth) throws HibernateException {
+    public List<Person> searchByParams(String firstName, String lastName, LocalDate dateOfBirth)
+            throws HibernateException {
         return searchByParams(new HashMap<String, Object>() {{
             put("firstName", firstName);
             put("lastName", lastName);
@@ -54,12 +59,30 @@ public class PersonDAO extends AbstractDAO<Person> {
         }});
     }
 
+
+    @Override
+    <T> T executeQuery(ExecutableQuery<T> query) throws HibernateException {
+        try {
+            return super.executeQuery(query);
+        } catch (PersistenceException e) {
+            if (e.getCause() instanceof ConstraintViolationException &&
+                    ((ConstraintViolationException) e.getCause()).getConstraintName().contains("COLOR_RANGE"))
+            {
+                LOGGER.log(WARNING, "Invalid color value found in request");
+                throw new WebApplicationException("Invalid color value found in request. Available values: " + Color.printAllValues());
+            } else {
+                throw e;
+            }
+        }
+    }
+
     public Person updateById(final int id, Person personFromUpdate) throws WebApplicationException {
         return executeQuery((Session session) -> {
-            Person person = (Person) session.createQuery("from Person where id=:id ").setParameter("id", id).uniqueResult();
+            Person person = (Person) session.createQuery("from Person where id=:id ")
+                    .setParameter("id", id).uniqueResult();
 
             if (person == null) {
-                logger.log(Level.WARNING, String.format("Entity %s was not found by id:%d.", Person.class, id));
+                LOGGER.log(Level.WARNING, String.format("Entity %s was not found by id:%d.", Person.class, id));
                 throw new EntityNotFoundException(Person.class, "id", id,
                         new IllegalArgumentException("Attempt to create update event with null entity."));
             }
@@ -82,10 +105,11 @@ public class PersonDAO extends AbstractDAO<Person> {
 
     public void deleteById(final int id) throws WebApplicationException {
         executeQuery((Session session) -> {
-            Person person = (Person) session.createQuery("from Person where id=:id ").setParameter("id", id).uniqueResult();
+            Person person = (Person) session.createQuery("from Person where id=:id ")
+                    .setParameter("id", id).uniqueResult();
 
             if (person == null) {
-                logger.log(Level.WARNING, String.format("Entity %s was not found by id:%d", Person.class, id));
+                LOGGER.log(Level.WARNING, String.format("Entity %s was not found by id:%d", Person.class, id));
                 throw new EntityNotFoundException(Person.class, "id", id,
                         new IllegalArgumentException("Attempt to create delete event with null entity"));
             }

@@ -20,9 +20,11 @@ public class InvalidRequestDataException extends WebApplicationException {
         this(entityClass, key, value, cause, null);
     }
 
-    public InvalidRequestDataException(String entityClass, String key, Object value, Throwable cause, String description) {
+    public InvalidRequestDataException(String entityClass, String key, Object value, Throwable cause,
+                                       String description) {
         super("Invalid request data", cause);
-        this.exception = new InvalidRequestDataException.InvalidRequestData(cause.getMessage(), entityClass, key, value, description);
+        this.exception = new InvalidRequestDataException.InvalidRequestData(cause.getMessage(),
+                entityClass, key, value, description);
     }
 
     public InvalidRequestDataException(InvalidRequestDataException e) {

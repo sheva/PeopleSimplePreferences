@@ -63,16 +63,17 @@ public abstract class AbstractDAO<E> {
             }
             if (e.getCause() instanceof ConstraintViolationException) {
                 ConstraintViolationException constraint = (ConstraintViolationException) e.getCause();
-                logger.log(Level.WARNING, e.toString(), e);
-
-                if  (constraint.getConstraintName().contains("UNIQUE")) {
+                final String constraintName = constraint.getConstraintName();
+                if  (constraintName.contains("UNIQUE")) {
+                    logger.log(Level.WARNING, e.toString(), e);
                     throw new AlreadyExistsException(entityClass, e.getCause());
-                } else if (constraint.getConstraintName().contains("NOT NULL")) {
+                } else if (constraintName.contains("NOT NULL")) {
+                    logger.log(Level.WARNING, e.toString(), e);
                     SQLException sqlException = ((ConstraintViolationException) e.getCause()).getSQLException();
                     throw new InvalidRequestDataException(entityClass.getSimpleName(), null, null, sqlException);
+                } else {
+                    throw e;
                 }
-
-                throw e;
             }
 
             logger.log(Level.SEVERE, e.toString(), e);
@@ -115,16 +116,18 @@ public abstract class AbstractDAO<E> {
                 }
 
                 if (index.getAndIncrement() == 0) {
-                    query.append(" e where");
+                    query.append(" e where ");
                 } else {
                     query.append(" and ");
                 }
 
+                final String propertyQueryPart;
                 if (value instanceof String) {
-                    query.append(" lower(e.").append(property).append(") like :").append(property);
+                    propertyQueryPart = "lower(e." + property + ") like :" + property;
                 } else {
-                    query.append(" e.").append(property).append("=:").append(property);
+                    propertyQueryPart = "e." + property + "=:" + property;
                 }
+                query.append(propertyQueryPart);
             });
 
             Query hibQuery = session.createQuery(query.toString());

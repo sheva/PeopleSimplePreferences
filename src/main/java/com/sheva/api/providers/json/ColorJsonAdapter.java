@@ -23,7 +23,8 @@ public class ColorJsonAdapter implements JsonSerializer<Set<Color>>, JsonDeseria
     }
 
     @Override
-    public Set<Color> deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
+    public Set<Color> deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context)
+            throws JsonParseException {
         if (!(jsonElement instanceof JsonArray)) {
             LOGGER.log(WARNING, "Invalid format of color element.");
             throw new JsonParseException("Invalid format of color element. Should be an array.");

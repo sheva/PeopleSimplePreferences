@@ -35,7 +35,8 @@ public class FoodCreateScenarios extends Steps {
     @Given("create new food request with <name> in <mediaType>.")
     public void givenCreateNewPersonRequestWithParams(@Named("name") String name,
                                                       @Named("mediaType") String mediaType) {
-        requestBuilder = getTarget().path("foodlist").request().accept(mediaType).buildPost(Entity.entity(new Food(name), mediaType));
+        requestBuilder = getTarget().path("foodlist").request().accept(mediaType).
+                buildPost(Entity.entity(new Food(name), mediaType));
     }
 
     @When("food with <name> does not exists in database.")

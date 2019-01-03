@@ -69,8 +69,8 @@ abstract class CollectionMessageBodyWriter<E> {
     }
 
     private void writeXml(ArrayList<E> list, OutputStream out) throws IOException {
-        final Document document = DocumentHelper.createDocument();
-        final Element root = document.addElement(buildRootElement());
+        final Document doc = DocumentHelper.createDocument();
+        final Element root = doc.addElement(buildRootElement());
 
         list.forEach(item -> {
             try (StringWriter stringWriter = new StringWriter()) {
@@ -78,10 +78,10 @@ abstract class CollectionMessageBodyWriter<E> {
 
                 INSTANCE.createMarshaller().marshal(item, xmlStream);
 
-                Document personDoc = DocumentHelper.parseText(stringWriter.toString());
-                Element personRoot = personDoc.getRootElement();
+                Document itemDoc = DocumentHelper.parseText(stringWriter.toString());
+                Element itemRoot = itemDoc.getRootElement();
 
-                root.add(personRoot.detach());
+                root.add(itemRoot.detach());
 
             } catch (JAXBException | IOException | XMLStreamException | DocumentException e) {
                 logger.log(SEVERE, String.format("Error serializing object '%s' to the output stream.", item), e);
@@ -89,14 +89,14 @@ abstract class CollectionMessageBodyWriter<E> {
             }
         });
 
-        out.write(document.asXML().getBytes());
+        out.write(doc.asXML().getBytes());
     }
 
     protected abstract Class getEntityClass();
 
     private QName buildRootElement() {
-        XmlRootElementCollection xmlAnnotation = ApplicationHelper.getAnnotation(getEntityClass(), XmlRootElementCollection.class);
-        String name = xmlAnnotation != null ? StringUtils.trim(xmlAnnotation.name()) : getEntityClass().getSimpleName() + "s";
+        XmlRootElementCollection annotation = ApplicationHelper.getAnnotation(getEntityClass(), XmlRootElementCollection.class);
+        String name = annotation != null ? StringUtils.trim(annotation.name()) : getEntityClass().getSimpleName() + "s";
 
         logger.log(FINE, String.format("XML node name set to '%s' for collection of %s.", name, getEntityClass().getSimpleName()));
         return new QName(name);

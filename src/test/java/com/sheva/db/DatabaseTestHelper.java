@@ -53,7 +53,8 @@ public class DatabaseTestHelper {
                     if (transaction != null)
                         transaction.rollback();
 
-                    if (e instanceof ConstraintViolationException && ((ConstraintViolationException) e).getConstraintName().contains("UNIQUE")) {
+                    if (e instanceof ConstraintViolationException
+                            && ((ConstraintViolationException) e).getConstraintName().contains("UNIQUE")) {
                         logger.log(Level.WARNING, "Seams like test data was already loaded");
                         break;
                     }
@@ -99,7 +100,8 @@ public class DatabaseTestHelper {
     }
 
     public static List findPersonByParams(String firstName, String lastName, String dateOfBirth) {
-        return executeSqlQuery("select * from PERSON where firstName='" + firstName + "' and lastName='" + lastName + "' and dateOfBirth='" + dateOfBirth +"'");
+        return executeSqlQuery("select * from PERSON where firstName='" + firstName +
+                "' and lastName='" + lastName + "' and dateOfBirth='" + dateOfBirth +"'");
     }
 
     public static List findFoodByName(String name) {

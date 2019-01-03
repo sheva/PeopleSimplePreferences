@@ -52,7 +52,8 @@ public class LocalDateType implements UserType {
 
     @Override
     public Object nullSafeGet(ResultSet resultSet, String[] strings,
-                              SharedSessionContractImplementor implementor, Object o) throws HibernateException, SQLException {
+                              SharedSessionContractImplementor implementor, Object o)
+            throws HibernateException, SQLException {
         if (!resultSet.wasNull()) {
             String dateString = resultSet.getString(strings[0]);
 
@@ -67,14 +68,15 @@ public class LocalDateType implements UserType {
 
     @Override
     public void nullSafeSet(PreparedStatement statement, Object value, int index,
-                            SharedSessionContractImplementor implementor) throws HibernateException, SQLException {
+                            SharedSessionContractImplementor implementor)
+            throws HibernateException, SQLException {
         if (value == null) {
             statement.setNull(index, Types.VARCHAR);
             logger.log(Level.FINEST, "Date set to null.");
         } else {
             String date = ((LocalDate) value).format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-            logger.log(Level.FINEST, "Date set to " + date);
             statement.setString(index, date);
+            logger.log(Level.FINEST, "Date set to " + date);
         }
     }
 

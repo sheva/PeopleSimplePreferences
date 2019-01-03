@@ -40,8 +40,8 @@ public class PersonCollectionMessageBodyWriter extends CollectionMessageBodyWrit
 
     @Override
     public void writeTo(ArrayList<Person> list, Class<?> aClass, Type type, Annotation[] annotations,
-                        MediaType mediaType, MultivaluedMap<String, Object> multivaluedMap,
-                        OutputStream outputStream) throws WebApplicationException {
+                        MediaType mediaType, MultivaluedMap<String, Object> multivaluedMap, OutputStream outputStream)
+            throws WebApplicationException {
         writeTo(list, mediaType, outputStream);
     }
 

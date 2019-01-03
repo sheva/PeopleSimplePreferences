@@ -47,7 +47,7 @@ function createPerson() {
 }
 
 function retrieveRequest(xhr, settings) {
-    $('#requestURLText').text(xhr.url);
+    $('#requestURLText').text(xhr.responseURL);
     $('#requestBodyText').text(settings.data || '');
     $('#responseBodyText').text('');
 }

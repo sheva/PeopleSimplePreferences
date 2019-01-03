@@ -22,7 +22,8 @@ public class FoodDAO extends AbstractDAO<Food> {
 
     public Food updateById(final int id, final String name) throws WebApplicationException {
         return executeQuery((Session session) -> {
-            Food food = (Food) session.createQuery("from Food where id=:id ").setParameter("id", id).uniqueResult();
+            Food food = (Food) session.createQuery("from Food where id=:id ")
+                    .setParameter("id", id).uniqueResult();
 
             if (food == null) {
                 logger.log(Level.WARNING, String.format("Entity %s was not found by id:%d.", Food.class, id));
@@ -49,11 +50,13 @@ public class FoodDAO extends AbstractDAO<Food> {
 
     @Override
     public Food create(Food entity) throws HibernateException {
-        throw new UnsupportedOperationException("Create method is not allowed. Entity created during person persistence.");
+        throw new UnsupportedOperationException("Create method is not allowed. " +
+                "Entity created during person persistence.");
     }
 
     @Override
     public void delete(Food entity) throws HibernateException {
-        throw new UnsupportedOperationException("Delete method is not allowed. Entity deleted during person deletion.");
+        throw new UnsupportedOperationException("Delete method is not allowed. " +
+                "Entity deleted during person deletion.");
     }
 }
