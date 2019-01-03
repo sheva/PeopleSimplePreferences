@@ -117,6 +117,8 @@ Special test page created, served by dev server, to test the API in the browser:
 
 First you need to choose HTTP method, then - fill the form & send.
 
+![test_page](simplePeoplePref.png "Test page")
+
 ## Tests
 
 JUnit for unit tests and JBehave for application-level tests used. Run tests command:
