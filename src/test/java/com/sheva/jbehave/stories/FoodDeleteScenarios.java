@@ -11,7 +11,7 @@ import static com.sheva.jbehave.stories.AppStories.getTarget;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 
-import static com.sheva.db.DatabaseTestHelper.findFoodById;
+import static com.sheva.db.DatabaseTestHelper.*;
 
 /**
  * 'foodlist' resource DELETE scenario.
@@ -24,12 +24,12 @@ public class FoodDeleteScenarios extends Steps {
 
     @BeforeScenario(uponType = ScenarioType.ANY)
     public void beforeEachExampleScenario() throws Exception {
-        DatabaseTestHelper.loadTestData();
+        loadTestData();
     }
 
     @AfterScenario(uponType = ScenarioType.ANY)
     public void afterAnyScenario() throws Exception {
-        DatabaseTestHelper.deleteAllData();
+        deleteAllData();
     }
 
     @Given("DELETE request send for specific food with <id>. Request media type supported <mediaType>.")

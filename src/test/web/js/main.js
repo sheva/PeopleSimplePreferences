@@ -46,8 +46,8 @@ function createPerson() {
     });
 }
 
-function retrieveRequest(xhr, settings) {
-    $('#requestURLText').text(xhr.responseURL);
+function retrieveRequest(settings) {
+    $('#requestURLText').text(settings.url);
     $('#requestBodyText').text(settings.data || '');
     $('#responseBodyText').text('');
 }

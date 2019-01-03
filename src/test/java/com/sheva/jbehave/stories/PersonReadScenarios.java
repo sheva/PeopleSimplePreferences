@@ -18,6 +18,7 @@ import static com.sheva.jbehave.stories.AppStories.getTarget;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static com.sheva.db.DatabaseTestHelper.*;
 
 /**
  * Person find stories.
@@ -30,12 +31,12 @@ public class PersonReadScenarios extends Steps {
 
     @BeforeScenario(uponType = ScenarioType.ANY)
     public void beforeEachExampleScenario() throws Exception {
-        DatabaseTestHelper.loadTestData();
+        loadTestData();
     }
 
     @AfterScenario(uponType = ScenarioType.ANY)
     public void afterAnyScenario() throws Exception {
-        DatabaseTestHelper.deleteAllData();
+        deleteAllData();
     }
 
     @Given("GET request to resource 'people'. Request supported <mediaType>.")
