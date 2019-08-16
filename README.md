@@ -1,12 +1,12 @@
 People Simple Preferences
 =========================
 
-RESTful API to manage personal info (name, age) and personal preferences (food, color).
+RESTful API to manage personal info - name & age, and personal preferences - favorite food & color.
 
 The project uses the following technologies: 
 
 * web/REST: Grizzly, Jersey
-* marshalling: GSON (for JSON) and JAXB (for XML) 
+* marshalling: GSON and JAXB
 * persistence: Hibernate, SQLite
 * building: Maven
 * testing: JUnit, JBehave
@@ -18,7 +18,7 @@ The project uses the following technologies:
 
 ## Details
 
-Implemented date of birth instead of age, because age is dynamic value. But "age" also present in model as transient field - it's read-only & auto-calculated from date of birth.
+Implemented date of birth instead of age, because age is dynamic value. But "age" also present in model as transient field - it's read-only & auto-calculated from a date of birth.
 
 Implemented multiple preferences for color & food. Color preferences are sub-set of pre-defined colors represented by `enum`. Food preferences are user-generated.
 
