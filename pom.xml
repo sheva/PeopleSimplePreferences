@@ -230,7 +230,7 @@
                                 <version>${project.version}</version>
                                 <description>Swagger specification for ${project.name} RESTful API</description>
                                 <contact>
-                                    <email>essheva@gmail.com</email>
+                                    <email>test@gmail.com</email>
                                     <name>Sheva</name>
                                 </contact>
                             </info>
